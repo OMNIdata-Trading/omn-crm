@@ -1,0 +1,17 @@
+{
+    "Auth": true,
+    "Login": true,
+    "Register": true,
+    "Dashboard": true,
+    "Leads": true,
+    "Requests": true,
+    "Proposals": true,
+    "Settings": true,
+    "Colaborators": true,
+    "Users": true,
+    "Tasks": true,
+    "Goals": true,
+    "Invoices": true,
+    "Storage": true,
+    "Quotation": true
+}
