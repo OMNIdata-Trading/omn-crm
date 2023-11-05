@@ -1,4 +1,4 @@
-<div>
+<!-- <div>
     <form class="card" wire:submit='create'>
         <div class="card-body">
           <div class="row row-cards">
@@ -11,9 +11,9 @@
                 class="form-select"
                 id="select-company-requester"
                 wire:model='idSelectedCompany'
-                wire:change='changeDetectedOnCompanySelect'
+                wire:change='changeDetected'
                 >
-                    <option value="" selected>-- Seleccione a empresa --</option>
+                    <option value="" disabled selected>-- Seleccione a empresa --</option>
                     <option value="0">Singular</option>
                     @forelse ($registeredClientCompanies as $registeredClientCompany)
                         @if ($registeredClientCompany->logo_path)
@@ -36,12 +36,9 @@
                 <select
                 type="text"
                 class="form-select"
-                wire:model='idClientColaborator'
-                wire:change='changeDetectedOnClientColaboratorSelect'
                 placeholder="Seleccione os responsáveis da solicitação"
                 id="select-client-company-colaborators"
                 >
-                  <option value="" selected>-- Seleccione o responsável --</option>
                     @forelse ($clientCompanyColaborators as $clientComapanyColaborator)
                         <option value="{{ $clientComapanyColaborator->id }}">
                             {{ $clientComapanyColaborator->fullname }}
@@ -194,9 +191,9 @@
   //       },
   //       success: function(response){
   //         // console.log(response);
-  //         console.log(clientPersonSelect[0].tomselect)
+  //         console.log(clientPersonSelect[0].tomselect.))
   //         // console.log(this)
-  //         clientPersonSelect.html('<option value="no-records" disabled>-- du --</option>');
+  //         // clientPersonSelect.html('<option value="no-records" disabled>-- No records --</option>');
   //       }
   //     })
   //   });
@@ -214,14 +211,27 @@
 {{-- Select input das empresas-cliente --}}
 <script>
   // @formatter:off
+  document.addEventListener("DOMContentLoaded", function () {
 
-  let handler = {
+    // Livewire.hook('message.processed', (message, component) => {
+
+    //   console.log(component);
+    //   // let selects = el.querySelectorAll(component.el)
+    //   // console.log(selects);
+    //   // if (selects.length != 0) {
+    //   //     selects.forEach((select) => {
+    //   //         select.tomselect = undefined
+    //   //         new TomSelect(select)
+    //   //     })
+    //   // }
+
+    // });
+
+    var el;
+    let select = window.TomSelect && (new TomSelect(el = document.getElementById('select-company-requester'), {
       copyClassesToDropdown: false,
       dropdownParent: 'body',
       controlInput: '<input>',
-      load: function(query, callback){
-
-      },
       render:{
         item: function(data,escape) {
           if( data.customProperties ){
@@ -236,19 +246,40 @@
           return '<div>' + escape(data.text) + '</div>';
         },
       },
-  };
+    }));
 
-  
-  document.addEventListener("DOMContentLoaded", function () {
-    
-    // var select = new TomSelect(document.getElementById('select-company-requester'), handler);
+    select.off();
+
+  //   // select.on('change', () => {
+  //   //   select.sync();
+  //   // })
   });
 
-  // document.addEventListener('livewire:initialized', () => {
-  //   @this.on('companySelectHasChanged', (event) => {
-  //     // alert("mudou!");      
-  //     var select = new TomSelect(document.getElementById('select-company-requester'), handler);
-  //   })
-  // });
+  document.addEventListener('livewire:initialized', () => {
+    @this.on('companySelectHasChanged', (event) => {
+      // alert("mudou!");
+      var el;
+    window.TomSelect && (new TomSelect(el = document.getElementById('select-company-requester'), {
+      copyClassesToDropdown: false,
+      dropdownParent: 'body',
+      controlInput: '<input>',
+      render:{
+        item: function(data,escape) {
+          if( data.customProperties ){
+            return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
+          }
+          return '<div>' + escape(data.text) + '</div>';
+        },
+        option: function(data,escape){
+          if( data.customProperties ){
+            return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
+          }
+          return '<div>' + escape(data.text) + '</div>';
+        },
+      },
+    }));
+
+    })
+  });
   // @formatter:on
-</script>
+</script> -->

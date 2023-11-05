@@ -71,38 +71,6 @@ Solicitações
   <script src="{{ URL::to('dist/js/tabler.min.js?1684106062') }}" defer></script>
   <script src="{{ URL::to('dist/js/demo.min.js?1684106062') }}" defer></script>
 
-  {{-- Select input das empresas-cliente --}}
-  <script>
-    // @formatter:off
-    // document.addEventListener("DOMContentLoaded", function () {
-    //   var el;
-    //   window.TomSelect && (new TomSelect(el = document.getElementById('select-company-requester'), {
-    //     copyClassesToDropdown: false,
-    //     dropdownParent: 'body',
-    //     controlInput: '<input>',
-    //     render:{
-    //       item: function(data,escape) {
-    //         if( data.customProperties ){
-    //           return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
-    //         }
-    //         return '<div>' + escape(data.text) + '</div>';
-    //       },
-    //       option: function(data,escape){
-    //         if( data.customProperties ){
-    //           return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
-    //         }
-    //         return '<div>' + escape(data.text) + '</div>';
-    //       },
-    //     },
-    //   }));
-
-    //   // select.on('change', () => {
-    //   //   select.sync();
-    //   // })
-    // });
-    // @formatter:on
-  </script>
-
   {{-- Select Input dos colaboradores das empresas-cliente --}}
   <script>
     // @formatter:off

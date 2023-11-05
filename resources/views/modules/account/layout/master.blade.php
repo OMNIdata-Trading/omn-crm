@@ -13,6 +13,11 @@
     <link href="{{ URL::to('dist/css/tabler-payments.min.css?1684106062') }}" rel="stylesheet"/>
     <link href="{{ URL::to('dist/css/tabler-vendors.min.css?1684106062') }}" rel="stylesheet"/>
     <link href="{{ URL::to('dist/css/demo.min.css?1684106062') }}" rel="stylesheet"/>
+    
+    
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.min.js"></script>
+
     <style>
       @import url('https://rsms.me/inter/inter.css');
       :root {
@@ -76,9 +81,9 @@
         </footer>
       </div>
     </div>
+
     @yield('account.page.additionals')
     @yield('account.page.scripts')
-
     @livewireScripts
   </body>
 </html>

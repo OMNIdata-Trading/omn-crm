@@ -32,5 +32,8 @@
     </div>
     <script src="{{ URL::to('dist/js/tabler.min.js?1684106062') }}" defer></script>
     <script src="{{ URL::to('dist/js/demo.min.js?1684106062') }}" defer></script>
+    
+    @yield('scripts')
+    
   </body>
 </html>
