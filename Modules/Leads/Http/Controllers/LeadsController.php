@@ -17,8 +17,9 @@ class LeadsController extends Controller
     public function index()
     {
         $leads = ClientCompany::limit(20)->get();
-        $leads[] = ClientColaboratorRequester::where('id_client_company', null)->limit(20)->get();
-        return view('leads::pages.index', compact('leads'));
+        $singularLeads[] = ClientColaboratorRequester::where('id_client_company', null)->limit(20)->get();
+        // dd($leads);
+        return view('leads::pages.index', compact('leads', 'singularLeads'));
     }
 
     /**

@@ -301,9 +301,12 @@ Leads & Clientes
                 <tbody>
                   @foreach ($leads as $lead)
                   <tr>
+                    @php
+                        // dd($lead->logo_path == null);
+                    @endphp
                     <td data-label="Name" >
                       <div class="d-flex py-1 align-items-center">
-                        @if ($lead->logo_path)
+                        @if ($lead->logo_path != null)
                         <span class="avatar me-2" style="background-image: url({{ URL::to($lead->logo_path) }})"></span>
                         @else
                         <span class="avatar me-2"> {{ getTheInitialLetters($lead->name) }} </span>
