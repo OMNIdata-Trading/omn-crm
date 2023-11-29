@@ -31,6 +31,7 @@ class MigrationsAndSeedersModulesRobot extends Command
     public function handle()
     {
         $this->call('migrate:fresh', [
+            '--seed' => 'seed',
             '--force' => 'force',
         ]);
 

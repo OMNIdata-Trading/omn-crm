@@ -5,6 +5,7 @@ namespace Modules\Requests\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Modules\Requests\Entities\ClientRequests;
 
 class RequestsController extends Controller
 {
@@ -14,7 +15,8 @@ class RequestsController extends Controller
      */
     public function index()
     {
-        return view('requests::pages.index');
+        $requests = ClientRequests::orderBy('id', 'desc')->limit(20)->get();
+        return view('requests::pages.index', compact('requests'));
     }
 
     /**

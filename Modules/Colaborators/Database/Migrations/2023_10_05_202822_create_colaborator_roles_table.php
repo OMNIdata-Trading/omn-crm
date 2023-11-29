@@ -14,6 +14,10 @@ return new class extends Migration
         Schema::create('colaborator_roles', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->foreignId('id_role_classification')
+                  ->nullable()
+                  ->constrained('colaborator_role_classifications')
+                  ->cascadeOnDelete();
             $table->timestamps();
         });
     }

@@ -1432,10 +1432,6 @@ Dashboard
 {{-- <script src="{{ URL::to('dist/libs/jsvectormap/dist/maps/world.js?1684106062') }}" defer></script>
 <script src="{{ URL::to('dist/libs/jsvectormap/dist/maps/world-merc.js?1684106062') }}" defer></script> --}}
 
-<!-- Tabler Core -->
-<script src="{{ URL::to('dist/js/tabler.min.js?1684106062') }}" defer></script>
-<script src="{{ URL::to('dist/js/demo.min.js?1684106062') }}" defer></script>
-
 {{-- Gráfico de Receitas --}}
 <script>
   // @formatter:off

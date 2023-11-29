@@ -13,10 +13,14 @@ return new class extends Migration
     {
         Schema::create('quotations', function (Blueprint $table) {
             $table->id();
-            $table->string('vendor');
-            $table->string('delivery_time');
-            $table->date('requested_at');
-            $table->date('responsed_at');
+            $table->string('vendor')
+                  ->nullable();
+            $table->string('delivery_time')
+                  ->nullable();
+            $table->date('requested_at')
+                  ->nullable();
+            $table->date('responsed_at')
+                  ->nullable();
             $table->foreignId('id_request')
                   ->nullable()
                   ->constrained('client_requests')

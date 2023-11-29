@@ -19,7 +19,19 @@ class ClientCompany extends Model
         'status'
     ];
 
-    public function colaborators(){
+    public function colaborators()
+    {
         return $this->hasMany(ClientColaboratorRequester::class, 'id_client_company', 'id');
     }
+
+    public function addresses()
+    {
+        return $this->hasMany(ClientAddress::class, 'id_client_company', 'id');
+    }
+
+    public function contacts()
+    {
+        return $this->hasMany(ClientContact::class, 'id_client_company', 'id');
+    }
+
 }

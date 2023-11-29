@@ -1,16 +1,9 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+use Illuminate\Support\Facades\Route;
+use Modules\Colaborators\Http\Controllers\ColaboratorsController;
 
-Route::prefix('colaborators')->group(function() {
-    Route::get('/', 'ColaboratorsController@index');
+Route::group(['prefix' => 'account/colaborators', 'middleware' => 'auth'], function(){
+    Route::resource('colaborators', ColaboratorsController::class)->names('account.colaborators');
+    Route::get('/settings', [ ColaboratorsController::class, 'settings' ])->name('account.colaborators.settings');
 });

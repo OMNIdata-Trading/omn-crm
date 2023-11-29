@@ -38,6 +38,7 @@ Solicitações
 @endsection
 
 @section('account.page.content')
+<div class="row row-deck row-cards">
   <div class="col-sm-6 col-lg-3">
     <div class="card">
       <div class="card-body">
@@ -151,7 +152,7 @@ Solicitações
               </div>
               <div class="col">
                 <div class="font-weight-medium">
-                  133 Solicitações recebidas
+                  {{ $requests->count() }} Solicitações recebidas ({{ date('Y') }})
                 </div>
               </div>
             </div>
@@ -176,7 +177,15 @@ Solicitações
                 </div>
                 <div class="col">
                   <div class="font-weight-medium">
-                    133 solicitações tratadas
+                    @php
+                        $treatedRequests = 0;
+                        foreach ($requests as $key => $request) {
+                          if($request->proposals->count() > 0){
+                            $treatedRequests += $request->proposals->count();
+                          }
+                        }
+                    @endphp
+                    {{ $treatedRequests }} solicitações tratadas ({{ date('Y') }})
                   </div>
                 </div>
               </div>
@@ -271,33 +280,48 @@ Solicitações
               </tr>
             </thead>
             <tbody>
+              @foreach ($requests as $request)
               <tr>
                 <td data-label="Client" >
                   <div class="d-flex py-1 align-items-center">
-                    <span class="avatar me-2" style="background-image: url({{ URL::to('dist/img/clients/unitel.png') }})"></span>
-                    <div class="flex-fill">
-                      <div class="font-weight-medium">Priscila de Oliveira</div>
-                      <div class="text-muted">priscila.oliveira@unitel.co.ao</div>
-                      {{-- <div class="text-muted"><a href="#" class="text-reset">isaquias.marques@unitel.co.ao</a></div> --}}
-                    </div>
+                    @foreach ($request->clients as $key => $client)
+
+                      @if ($key == 0)
+                        @if ($client->company)
+                          @if ($client->company->logo_path)
+                          <span class="avatar me-2" style="background-image: url({{ URL::to($client->company->logo_path) }})"></span>
+                          @else
+                          <span class="avatar me-2"> {{ getTheInitialLetters($client->company->name) }} </span>
+                          @endif
+                        @else
+                          <span class="avatar me-2"> {{ getTheInitialLetters($client->fullname) }} </span>
+                        @endif
+                        <div class="flex-fill">
+                          <div class="font-weight-medium">{{ $client->fullname }}</div>
+                          <div class="text-muted">{{ $client->email }}</div>
+                        </div>
+                      @else
+                          
+                      @endif
+                    @endforeach
                   </div>
                 </td>
                 <td data-label="Order" >
-                  <div>Fornecimento de computadores portáteis</div>
-                  <div class="text-muted"><a href="#" class="text-reset">#Código: UNITEL-034</a></div>
+                  <div class="table-long-text">{{ $request->order }}</div>
+                  <div class="text-muted"><a href="#" class="text-reset">#Código: {{ $request->request_code }}</a></div>
                 </td>
                 <td data-label="Colab" >
                   <div>
                       <div class="avatar-list avatar-list-stacked">
-                          <span class="avatar avatar-sm rounded">{{ getTheInitialLetters('Álvaro Adolfo') }}</span>
-                          <span class="avatar avatar-sm rounded">{{ getTheInitialLetters('Sebastião Pedro') }}</span>
-                          <span class="avatar avatar-sm rounded">{{ getTheInitialLetters('Miguel Barros') }}</span>
+                          @foreach ($request->colaborators as $colaborator)
+                          <span class="avatar avatar-sm rounded">{{ getTheInitialLetters($colaborator->fullname) }}</span>
+                          @endforeach
                       </div>
                   </div>
                 </td>
                 <td data-label="Title" >
-                  <div class="text-muted">4 Cotações</div>
-                  <div class="text-muted">1 Propostas geradas</div>
+                  <div class="text-muted">{{ ($request->quotations->count() > 0) ? $request->quotations->count() . (($request->quotations->count() > 1) ? ' Cotações': ' Cotação') : 'Sem cotações' }}</div>
+                  <div class="text-muted">{{ ($request->proposals->count() > 0) ? $request->proposals->count() . (($request->proposals->count() > 1) ? ' Propostas' : ' Proposta') : 'Sem propostas' }}</div>
                 </td>
                 <td class="text-muted" data-label="Role" >
                   <div>
@@ -311,8 +335,9 @@ Solicitações
                 </td>
                 <td>
                   <div class="btn-list flex-nowrap">
-                    <a href="#" class="btn btn-warning">
+                    <a href="#" class="btn">
                       Atribuir tarefas
+                      <span class="badge bg-green ms-2">{{ $request->tasks->count() }}</span>
                     </a>
                     <a href="#" class="btn btn-primary">
                       Visão geral
@@ -322,6 +347,12 @@ Solicitações
                         Ações
                       </button>
                       <div class="dropdown-menu dropdown-menu-end">
+                        <a class="dropdown-item" href="#">
+                          Gerar Proposta
+                        </a>
+                        <a class="dropdown-item" href="#">
+                          Atribuir cotação
+                        </a>
                         <a class="dropdown-item" href="#">
                           Editar
                         </a>
@@ -333,75 +364,19 @@ Solicitações
                   </div>
                 </td>
               </tr>
-              {{-- <tr>
-                  <td data-label="Client" >
-                    <div class="d-flex py-1 align-items-center">
-                      <span class="avatar me-2" style="background-image: url({{ URL::to('dist/img/clients/multitel.jpeg') }})"></span>
-                      <div class="flex-fill">
-                        <div class="font-weight-medium">Isaquias Marques</div>
-                        <div class="text-muted"><a href="#" class="text-reset">isaquias.marques@multitel.co.ao</a></div>
-                      </div>
-                    </div>
-                  </td>
-                  <td data-label="Order" >
-                    <div>Fornecimento de Roteadores Cisco</div>
-                    <div class="text-muted"><a href="#" class="text-reset">#Código: MULTITEL-014</a></div>
-                  </td>
-                  <td data-label="Colab" >
-                    <div>
-                        <div class="avatar-list avatar-list-stacked">
-                            <span class="avatar avatar-sm rounded">{{ getTheInitialLetters('Álvaro Adolfo') }}</span>
-                            <span class="avatar avatar-sm rounded">{{ getTheInitialLetters('Sebastião Pedro') }}</span>
-                        </div>
-                    </div>
-                  </td>
-                  <td data-label="Title" >
-                    <div class="text-muted">1 Cotação</div>
-                    <div class="text-muted">1 Proposta gerada</div>
-                  </td>
-                  <td class="text-muted" data-label="Role" >
-                    <div>
-                    </div>
-                    <div class="text-muted">
-                        <div class="text-muted">
-                        </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="btn-list flex-nowrap">
-                      <a href="#" class="btn btn-primary">
-                        Visão geral
-                      </a>
-                      <div class="dropdown">
-                        <button class="btn dropdown-toggle align-text-top" data-bs-toggle="dropdown">
-                          Ações
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-end">
-                          <a class="dropdown-item" href="#">
-                            Editar
-                          </a>
-                          <a class="dropdown-item" href="#">
-                            Eliminar
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-              </tr> --}}
+              @endforeach
             </tbody>
           </table>
         </div>
       </div>
   </div>
+</div>
 @endsection
 
 @section('account.page.scripts')
 
 <script src="{{ URL::to('dist/libs/apexcharts/dist/apexcharts.min.js?1684106062') }}" defer></script>
 <script src="{{ URL::to('dist/libs/tom-select/dist/js/tom-select.base.min.js?1684106062') }}" defer></script>
-<!-- Tabler Core -->
-<script src="{{ URL::to('dist/js/tabler.min.js?1684106062') }}" defer></script>
-<script src="{{ URL::to('dist/js/demo.min.js?1684106062') }}" defer></script>
 
 {{-- Gráfico de todas as solicitações --}}
 <script>

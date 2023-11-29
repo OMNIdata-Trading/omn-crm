@@ -81,15 +81,16 @@
         {{-- User Profile --}}
         <div class="nav-item dropdown">
           <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
-            <span class="avatar avatar-sm" style="background-image: url({{ URL::to('static/avatars/000m.jpg') }})"></span>
+            <span class="avatar avatar-sm">
+              {{ getTheInitialLetters(Auth::user()->colaborator->fullname) }}
+            </span>
             <div class="d-none d-xl-block ps-2">
-              <div>Álvaro Adolfo</div>
-              <div class="mt-1 small text-muted">Coordenador de Vendas</div>
+              <div>{{ Auth::user()->colaborator->fullname }}</div>
+              <div class="mt-1 small text-muted">{{ Auth::user()->colaborator->role->name }}</div>
             </div>
           </a>
           <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-            <a href="#" class="dropdown-item">Status</a>
-            <a href="./profile.html" class="dropdown-item">Profile</a>
+            <a href="{{ route('account.settings.profile') }}" class="dropdown-item">Perfil</a>
             <a href="#" class="dropdown-item">Feedback</a>
             <div class="dropdown-divider"></div>
             <a href="./settings.html" class="dropdown-item">Settings</a>
@@ -159,7 +160,11 @@
                       Solicitações
                       {{-- <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span> --}}
                     </a>
-                    <a class="dropdown-item"
+                    <a class="dropdown-item {{ activeIfUrlIs('quotations', 'active', 3) }}"
+                    href="{{ route('account.business.quotations.index') }}" >
+                      Cotações
+                    </a>
+                    <a class="dropdown-item {{ activeIfUrlIs('proposals', 'active', 3) }}"
                     href="{{ route('account.business.proposals.index') }}" >
                       Propostas
                     </a>
@@ -171,7 +176,7 @@
                     </a>
                     <a class="dropdown-item" href="./colors.html">
                         Notas de Entrega
-                      </a>
+                    </a>
                   </div>
                 </div>
               </div>
@@ -208,8 +213,8 @@
                   </div>
                 </div>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="./form-elements.html" >
+            <li class="nav-item {{ activeIfUrlIs('colaborators') }}">
+              <a class="nav-link" href="{{ route('account.colaborators.index') }}" >
                 <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-users-group" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -226,8 +231,8 @@
                 </span>
               </a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="./icons.html" >
+            <li class="nav-item  {{ activeIfUrlIs('users') }}">
+              <a class="nav-link" href="{{ route('account.users.index') }}" >
                 <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/star -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user-check" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -241,8 +246,8 @@
                 </span>
               </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="./icons.html" >
+            <li class="nav-item  {{ activeIfUrlIs('settings') }}">
+                <a class="nav-link" href="{{ route('account.settings.index') }}" >
                   <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/star -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-adjustments-cog" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>

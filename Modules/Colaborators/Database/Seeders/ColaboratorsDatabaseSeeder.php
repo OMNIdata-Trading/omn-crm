@@ -16,6 +16,11 @@ class ColaboratorsDatabaseSeeder extends Seeder
     {
         Model::unguard();
 
-        // $this->call("OthersTableSeeder");
+        $this->call([
+            ColaboratorRoleClassificationsSeeder::class,
+            ColaboratorRoleHabilitiesSeeder::class,
+            ColaboratorRolesSeeder::class,
+            ColaboratorsSeeder::class
+        ]);
     }
 }

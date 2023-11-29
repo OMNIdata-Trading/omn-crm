@@ -5,6 +5,9 @@ namespace Modules\Users\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
+use Modules\Colaborators\Entities\ColaboratorRoleHability;
+use Modules\Users\Entities\Users;
 
 class UsersController extends Controller
 {
@@ -12,9 +15,11 @@ class UsersController extends Controller
      * Display a listing of the resource.
      * @return Renderable
      */
+
     public function index()
     {
-        return view('users::index');
+        $users = Users::get();
+        return view('users::pages.index', compact('users'));
     }
 
     /**
@@ -75,5 +80,10 @@ class UsersController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function settings(){
+        $permissions = ColaboratorRoleHability::get();
+        return view('users::pages.settings', compact('permissions'));
     }
 }

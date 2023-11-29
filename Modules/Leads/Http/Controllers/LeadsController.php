@@ -5,6 +5,8 @@ namespace Modules\Leads\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Modules\Leads\Entities\ClientColaboratorRequester;
+use Modules\Leads\Entities\ClientCompany;
 
 class LeadsController extends Controller
 {
@@ -14,7 +16,9 @@ class LeadsController extends Controller
      */
     public function index()
     {
-        return view('leads::pages.index');
+        $leads = ClientCompany::limit(20)->get();
+        $leads[] = ClientColaboratorRequester::where('id_client_company', null)->limit(20)->get();
+        return view('leads::pages.index', compact('leads'));
     }
 
     /**

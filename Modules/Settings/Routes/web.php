@@ -1,16 +1,10 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+use App\Http\Controllers\modules\account\UserController;
+use Illuminate\Support\Facades\Route;
+use Modules\Settings\Http\Controllers\SettingsController;
 
-Route::prefix('settings')->group(function() {
-    Route::get('/', 'SettingsController@index');
+Route::group(['prefix' => 'account', 'middleware' => 'auth'], function(){
+    Route::resource('settings', SettingsController::class)->names('account.settings');
+    Route::get('/settings/profile', [ UserController::class,  'index' ])->name('account.settings.profile');
 });

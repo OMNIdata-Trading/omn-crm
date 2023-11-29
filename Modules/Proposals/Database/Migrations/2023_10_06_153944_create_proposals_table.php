@@ -19,6 +19,10 @@ return new class extends Migration
                   ->unique();
             $table->string('description')
                   ->nullable();
+            $table->foreignId('id_request')
+                  ->nullable()
+                  ->constrained('client_requests')
+                  ->nullOnDelete();
             $table->year('year');
             $table->enum('kind', ['supply', 'service_provision', 'supply_and_service_provision']);
             $table->enum('status', ['opened', 'negotiation', 'accepted', 'lost']);

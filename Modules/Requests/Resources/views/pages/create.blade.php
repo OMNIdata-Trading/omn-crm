@@ -44,12 +44,14 @@ Solicitações
 
 
 @section('account.page.content')
-<div class="col-lg-12">
-  <div class="row row-cards">
-    <div class="col-12">
-      
-      <livewire:requests::create-requests>
+<div class="row row-deck row-cards">
+  <div class="col-lg-12">
+    <div class="row row-cards">
+      <div class="col-12">
+        
+        <livewire:requests::create-requests>
 
+      </div>
     </div>
   </div>
 </div>
@@ -66,13 +68,9 @@ Solicitações
 @section('account.page.scripts')
 
   <script src="{{ URL::to('dist/libs/tom-select/dist/js/tom-select.base.min.js?1684106062') }}" defer></script>
-
-  <!-- Tabler Core -->
-  <script src="{{ URL::to('dist/js/tabler.min.js?1684106062') }}" defer></script>
-  <script src="{{ URL::to('dist/js/demo.min.js?1684106062') }}" defer></script>
-
+  
   {{-- Select Input dos colaboradores das empresas-cliente --}}
-  <script>
+  {{-- <script>
     // @formatter:off
     document.addEventListener("DOMContentLoaded", function () {
       var el;
@@ -97,10 +95,10 @@ Solicitações
       }));
     });
     // @formatter:on
-  </script>
+  </script> --}}
 
   {{-- Select input dos colaboradores a serem atribuídos tarefas --}}
-  <script>
+  {{-- <script>
     // @formatter:off
     document.addEventListener("DOMContentLoaded", function () {
       var el;
@@ -125,6 +123,6 @@ Solicitações
       }));
     });
     // @formatter:on
-  </script>
+  </script> --}}
 
 @endsection

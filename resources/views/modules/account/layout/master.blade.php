@@ -26,6 +26,14 @@
       body {
       	font-feature-settings: "cv03", "cv04", "cv11";
       }
+      .table-long-text{
+          max-width: 250px;
+          display: -webkit-box;
+          -webkit-line-clamp: 1;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          text-overflow: ellipsis;
+      }
     </style>
 
     @livewireStyles
@@ -40,9 +48,7 @@
           <!-- Page body -->
           <div class="page-body">
             <div class="container-xl">
-              <div class="row row-deck row-cards">
               @yield('account.page.content')
-              </div>
             </div>
           </div>
         <footer class="footer footer-transparent d-print-none">
@@ -83,6 +89,9 @@
     </div>
 
     @yield('account.page.additionals')
+    <!-- Tabler Core -->
+    <script src="{{ URL::to('dist/js/tabler.min.js?1684106062') }}" defer></script>
+    <script src="{{ URL::to('dist/js/demo.min.js?1684106062') }}" defer></script>
     @yield('account.page.scripts')
     @livewireScripts
   </body>

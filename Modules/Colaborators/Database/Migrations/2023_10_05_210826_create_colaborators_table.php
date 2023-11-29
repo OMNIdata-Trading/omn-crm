@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('fullname');
             $table->string('email')
                   ->unique();
+            $table->integer('colaborator_number')
+                  ->unique();
             $table->string('phone_number1')
                   ->nullable();
             $table->string('phone_number2')

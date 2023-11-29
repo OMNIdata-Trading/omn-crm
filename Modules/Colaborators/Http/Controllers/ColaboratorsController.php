@@ -5,6 +5,9 @@ namespace Modules\Colaborators\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Modules\Colaborators\Entities\Colaborator;
+use Modules\Colaborators\Entities\ColaboratorRole;
+use Modules\Colaborators\Entities\ColaboratorRoleClassification;
 
 class ColaboratorsController extends Controller
 {
@@ -14,7 +17,8 @@ class ColaboratorsController extends Controller
      */
     public function index()
     {
-        return view('colaborators::index');
+        $colaborators = Colaborator::get();
+        return view('colaborators::pages.index', compact('colaborators'));
     }
 
     /**
@@ -75,5 +79,11 @@ class ColaboratorsController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function settings(){
+        $roles = ColaboratorRole::get();
+        $classifications = ColaboratorRoleClassification::get();
+        return view('colaborators::pages.settings', compact('roles', 'classifications'));
     }
 }
