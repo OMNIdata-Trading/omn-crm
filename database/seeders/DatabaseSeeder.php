@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Modules\Colaborators\Database\Seeders\ColaboratorsDatabaseSeeder;
+use Modules\Requests\Database\Seeders\RequestsDatabaseSeeder;
 use Modules\Users\Database\Seeders\UsersDatabaseSeeder;
 
 class DatabaseSeeder extends Seeder
@@ -17,6 +18,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             ColaboratorsDatabaseSeeder::class,
             UsersDatabaseSeeder::class,
+            RequestsDatabaseSeeder::class,
         ]);
     }
 }

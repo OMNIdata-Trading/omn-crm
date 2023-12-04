@@ -13,11 +13,17 @@ return new class extends Migration
     {
         Schema::create('proposal_details', function (Blueprint $table) {
             $table->id();
-            $table->double('total_cost');
-            $table->string('lead_time');
-            $table->date('sent_to_client_at');
+            $table->double('total_cost')
+                  ->nullable();
+            $table->string('lead_time')
+                  ->nullable();
+            $table->date('sent_to_client_at')
+                  ->nullable();
             $table->enum('currency', ['ao', 'eu']);
-            $table->date('expiration_date');
+            $table->string('expiration_time')
+                  ->nullable();
+            // $table->string('payment_method')
+            //       ->nullable();
             $table->foreignId('id_proposal')
                   ->nullable()
                   ->constrained('proposals')

@@ -5,6 +5,8 @@ namespace Modules\Proposals\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\DB;
+use Modules\Proposals\Entities\Proposal;
 
 class ProposalsController extends Controller
 {
@@ -14,7 +16,44 @@ class ProposalsController extends Controller
      */
     public function index()
     {
-        return view('proposals::pages.index');
+        $classColors = [
+            'opened' => 'yellow',
+            'negotiation' => 'primary',
+            'accepted' => 'success',
+            'lost' => 'danger'
+        ];
+
+        $statusLabels = [
+            'opened' => 'Em Aberto',
+            'negotiation' => 'Negociação',
+            'accepted' => 'Adjudicadas',
+            'lost' => 'Perdidas'
+        ];
+
+        $proposalTypeLabelsTranslator = [
+            'technic' => 'Técnica',
+            'comercial' => 'Comercial',
+            'technic_and_comercial' => 'Técnica e Comercial'
+        ];
+        
+        $generalData = [
+            'countProposalsFromCurrentYear' => 0,
+            'proposalsStatus' => [],
+            'proposalsForTable' => []
+        ];
+
+        $model =  Proposal::whereYear('created_at', date('Y'));
+        $proposals = $model->get()->count();
+        $generalData['proposalForTable'] = $model->limit(20)->get();
+
+        $proposalStatusCounts = $model->select('status', DB::raw('count(*) as count'))
+                                    ->groupBy('status')
+                                    ->get();
+        
+        $generalData['proposalsStatus'] = $proposalStatusCounts->pluck('count', 'status')->toArray();
+        $generalData['countProposalsFromCurrentYear'] = $proposals;
+
+        return view('proposals::pages.index', compact('generalData', 'classColors', 'statusLabels', 'proposalTypeLabelsTranslator'));
     }
 
     /**

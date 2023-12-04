@@ -14,7 +14,7 @@ class ProposalDetail extends Model
         'lead_time',
         'sent_to_client_at',
         'currency',
-        'expiration_date',
+        'expiration_time',
         'id_proposal'
     ];
 

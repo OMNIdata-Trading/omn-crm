@@ -28,7 +28,7 @@
     <form class="card" enctype="multipart/form-data" wire:submit='store'>
         <div class="card-body">
           <div class="row row-cards">
-            <div class="col-md-6">
+            <div class="col-md-3">
               <div class="mb-3">
                 <label class="form-label required">Solicitação</label>
                 {{--  --}}
@@ -38,63 +38,212 @@
                 class="form-select"
                 id="select-request"
                 wire:model='idSelectedRequest'
-                wire:change='changeDetectedOnRequestsSelect'
                 >
                     <option value="" selected>-- Seleccione a solicitação --</option>
-                    @forelse ($registeredRequests as $registeredRequest)
-                        <option value="{{ $registeredRequest->id }}" data-custom-properties="&lt;span class=&quot;avatar avatar-xs&quot;&gt;{{ getTheInitialLetters($registeredRequest->name) }}&lt;/span&gt;">
-                            {{ $registeredRequest->request_code }}
+                    @forelse ($allRequests as $request)
+                        <option value="{{ $request->id }}">
+                            {{ $request->request_code }}
                         </option>
                     @empty
                     <option value="no-records" disabled>-- No records --</option>
                     @endforelse
                 </select>
               </div>
+              @error('idSelectedRequest')
+              <span class="text-small text-muted text-red">{{ $message }}</span>
+              @enderror
             </div>
-            <div class="col-sm-6 col-md-6">
-                <label for="select-client-company-colaborators required" class="form-label">Responsável</label>
+            <div class="col-md-9"></div>
+            <div class="col-sm-6 col-md-4">
+              <div class="mb-3">
+                <label class="form-label required">Tipo de proposta</label>
+                {{--  --}}
                 <select
                 required
                 type="text"
                 class="form-select"
-                wire:model='idClientColaborator'
-                placeholder="Seleccione os responsáveis da solicitação"
-                id="select-client-company-colaborators"
-                wire:change='changeDetectedOnClientColaboratorSelect'
+                wire:model='selectedProposalType'
                 >
-                  <option value="" selected>-- Seleccione o responsável --</option>
-                    @forelse ($clientCompanyColaborators as $clientComapanyColaborator)
-                        <option value="{{ $clientComapanyColaborator->id }}">
-                            {{ $clientComapanyColaborator->fullname }}
-                        </option>
-                    @empty
-                        <option value="no-records" disabled>-- No records --</option>
-                    @endforelse
+                    <option value="1">Técnica</option>
+                    <option value="2">Comercial</option>
+                    <option value="3">Técnica e Comercial</option>
                 </select>
+              </div>
+              @error('selectedProposalType')
+              <span class="text-small text-muted text-red">{{ $message }}</span>
+              @enderror
             </div>
-            <div class="col-sm-6 col-md-6">
+            <div class="col-sm-6 col-md-4">
               <div class="mb-3">
-                <label class="form-label required">Pedido</label>
-                <input type="text" class="form-control" required wire:model='order' placeholder="Ex: Fornecimento de equipamentos">
+                <label class="form-label">Número da Proposta</label>
+                <input
+                type="text"
+                class="form-control"
+                wire:model.live='orderNumber'
+                wire:keyup='generateProposalCode'
+                value="{{$orderNumber}}">
+              </div>
+              @error('existent-order-number')
+              <small class="form-hint text-red"> {{ $message }} </small>
+              @enderror
+              @error('orderNumber')
+              <span class="text-small text-muted text-red">{{ $message }}</span>
+              @enderror
+            </div>
+            <div class="col-sm-6 col-md-4">
+              <div class="mb-3">
+                <label class="form-label required">Ano da Proposta</label>
+                <select
+                required
+                type="text"
+                class="form-select"
+                wire:model='selectedProposalYear'
+                wire:change='generateProposalCode'
+                >
+                    @foreach ($proposalYears as $year)
+                        <option value="{{ $year }}">{{ $year }}</option>
+                    @endforeach
+                </select>
+              </div>
+              @error('selectedProposalYear')
+              <span class="text-small text-muted text-red">{{ $message }}</span>
+              @enderror
+            </div>
+            <div class="col-sm-6 col-md-4">
+              <div class="mb-3">
+                <label class="form-label required">Código da Proposta</label>
+                <input type="text" class="form-control" wire:model.live='proposalCode' disabled placeholder="" value="{{$proposalCode}}">
+              </div>
+              @error('proposalCode')
+                <small class="form-hint text-red"> {{ $message }} </small>
+              @enderror
+            </div>
+
+            <div class="col-sm-6 col-md-4">
+              <div class="mb-3">
+                <label class="form-label required">Classificação da Proposta</label>
+                {{--  --}}
+                <select
+                required
+                type="text"
+                class="form-select"
+                wire:model='selectedProposalClassification'
+                >
+                    <option value="1">Fornecimento</option>
+                    <option value="2">Prestação de Serviço</option>
+                    <option value="3">Fornecimento e Prestação de Serviços</option>
+                </select>
+              </div>
+              @error('selectedProposalClassification')
+              <span class="text-small text-muted text-red">{{ $message }}</span>
+              @enderror
+            </div>
+            <div class="col-sm-6 col-md-4">
+              <div class="mb-3">
+                <label class="form-label required">Estado da Proposta</label>
+                {{--  --}}
+                <select
+                required
+                type="text"
+                class="form-select"
+                wire:model='selectedProposalStatus'
+                >
+                    <option value="1">Aberto</option>
+                    <option value="2">Negociação</option>
+                    <option value="3">Adjudicada</option>
+                    <option value="4">Perdida</option>
+                </select>
+              </div>
+              @error('selectedProposalStatus')
+              <span class="text-small text-muted text-red">{{ $message }}</span>
+              @enderror
+            </div>
+            <div class="col-sm-6 col-md-12"></div>
+
+            <div class="col-sm-6 col-md-4">
+              <div class="mb-3">
+                <label class="form-label">Custo Total</label>
+                <input type="text" class="form-control" wire:model='proposalTotalCost' placeholder="">
               </div>
             </div>
-            <div class="col-sm-6 col-md-3">
+            <div class="col-sm-6 col-md-2">
               <div class="mb-3">
-                <label class="form-label required">Data da solicitação</label>
-                <input type="date" required wire:model='requestDate' class="form-control" placeholder="" max="{{ date('Y-m-d') }}" value="">
+                <label class="form-label required">Moeda</label>
+                {{--  --}}
+                <select
+                required
+                type="text"
+                class="form-select"
+                wire:model='selectedCurrency'
+                >
+                    <option value="1">AO</option>
+                    <option value="2">EUR</option>
+                </select>
+              </div>
+              @error('selectedCurrency')
+              <span class="text-small text-muted text-red">{{ $message }}</span>
+              @enderror
+            </div>
+            <div class="col-sm-6 col-md-3"> 
+              <div class="mb-3">
+                <label class="form-label">Tempo de Entrega</label>
+                <input type="text" class="form-control" wire:model='proposalLeadTime' placeholder="">
               </div>
             </div>
-            <div class="col-sm-6 col-md-3">
+            <div class="col-sm-6 col-md-12"></div>
+            
+            <label class="form-label required">Validade da Proposta</label>
+
+            <div class="col-sm-6 col-md-2">
               <div class="mb-3">
-                <label class="form-label">Código da solicitação</label>
-                <input type="text" class="form-control" wire:model.live='requestCode' disabled placeholder="" value="{{$requestCode}}">
+                {{-- <label class="form-label"></label> --}}
+                <input type="number" class="form-control" min="5" max="30" required wire:model='proposalExpiration'>
+              </div>
+              @error('proposalExpiration')
+              <span class="text-small text-muted text-red">{{ $message }}</span>
+              @enderror
+            </div>
+            <div class="col-sm-6 col-md-2">
+              <div class="mb-3">
+                {{-- <label class="form-label"></label> --}}
+                {{--  --}}
+                <select
+                required
+                type="text"
+                class="form-select"
+                wire:model='selectedProposalExpirationUnity'
+                >
+                    <option value="{{ ($proposalExpiration > 1) ? 'days' : 'day' }}"> {{ ($proposalExpiration > 1) ? 'Dias' : 'Dia' }} </option>
+                    <option value="{{ ($proposalExpiration > 1) ? 'weeks' : 'week' }}"> {{ ($proposalExpiration > 1) ? 'Semanas' : 'Semana' }} </option>
+                    <option value="{{ ($proposalExpiration > 1) ? 'months' : 'month' }}"> {{ ($proposalExpiration > 1) ? 'Meses' : 'Mês' }} </option>
+                    <option value="{{ ($proposalExpiration > 1) ? 'years' : 'year' }}"> {{ ($proposalExpiration > 1) ? 'Anos' : 'Ano' }} </option>
+                </select>
+              </div>
+              @error('selectedProposalExpirationUnity')
+              <span class="text-small text-muted text-red">{{ $message }}</span>
+              @enderror
+            </div>
+            <div class="col-md-12"></div>
+            <div class="col-sm-6 col-md-2">
+              <div class="mb-3">
+                <label class="form-label">Data de Envio da Proposta</label>
+                <input type="date" class="form-control" max="{{ date('Y-m-d') }}" wire:model='proposalDateSent'>
               </div>
             </div>
             <div class="col-md-12">
-              <div class="mb-3 mb-0">
+              <div class="mb-2">
                 <label class="form-label">Descrição</label>
-                <textarea rows="5" wire:model='description' class="form-control" placeholder="Descrição da solicitação"></textarea>
+                <textarea rows="5"
+                wire:model='description'
+                maxlength="{{ $descriptionMaxLength }}"
+                wire:keyup='validateDescription'
+                maxlength="" class="form-control"
+                placeholder="Descrição da solicitação"></textarea>
+                <small class="form-hint">{{ strlen($description) }}/500 caractéres</small>
               </div>
+              @error('description')
+              <span class="text-small text-muted text-red">{{ $message }}</span>
+              @enderror
             </div>
 
             {{-- Media --}}
@@ -165,7 +314,7 @@
             </div>
 
             {{-- Colaborators --}}
-            <label class="form-label">Colaboradores para dar tratamento</label>
+            {{-- <label class="form-label">Colaboradores para dar tratamento</label>
             @foreach ($allColaborators as $colaborator)
             <div class="col-md-3">
               <label class="form-selectgroup-item flex-fill">
@@ -186,12 +335,12 @@
                 </div>
               </label>
             </div>
-            @endforeach
+            @endforeach --}}
 
             {{-- @php
                 echo count($selectedColaborators);
             @endphp --}}
-            @if (count($selectedColaborators) > 0)
+            {{-- @if (count($selectedColaborators) > 0)
               <div class="col-md-12">
                 <div class="form-label">Atribuição de tarefas</div>
                 <div class="mb-3" @style('width: fit-content')>
@@ -246,7 +395,7 @@
               @else
                   
               @endif
-            @endif
+            @endif --}}
 
           </div>
         </div>

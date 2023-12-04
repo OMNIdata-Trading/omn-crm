@@ -46,93 +46,30 @@ Propostas
                 <div class="col-12">
                   <div class="card">
                     <div class="card-body">
-                      <p class="mb-3">Estado das <strong> 75 propostas </strong> de {{ date('Y') }}</p>
+
+                      <p class="mb-3">Estado das <strong> {{ $generalData['countProposalsFromCurrentYear'] ?? 0 }} propostas </strong> de {{ date('Y') }}</p>
                       <div class="progress progress-separated mb-3">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 58.6%" aria-label="Negociação"></div>
-                        <div class="progress-bar bg-warning" role="progressbar" style="width: 16%" aria-label="Em Aberto"></div>
-                        <div class="progress-bar bg-success" role="progressbar" style="width: 13.3%" aria-label="Adjudicadas"></div>
-                        <div class="progress-bar bg-danger" role="progressbar" style="width: 12%" aria-label="Perdidas"></div>
+                        @foreach ($generalData['proposalsStatus'] as $statusName => $proposalCount)
+                        <div class="progress-bar bg-{{ $classColors[$statusName] ?? 'default' }}" role="progressbar" style="width: {{ getThePercentage($proposalCount, $generalData['countProposalsFromCurrentYear']) }}" aria-label="{{$statusName}}"></div>
+                        @endforeach
                       </div>
+
                       <div class="row">
+                        @foreach ($generalData['proposalsStatus'] as $statusName => $proposalCount)
                         <div class="col-auto d-flex align-items-center pe-2">
-                          <span class="legend me-2 bg-primary"></span>
-                          <span>Negociação</span>
-                          <span class="d-none d-md-inline d-lg-none d-xxl-inline ms-2 text-muted">44</span>
+                          <span class="legend me-2 bg-{{ $classColors[$statusName] }}"></span>
+                          <span>{{ $statusLabels[$statusName] ?? 'Outro' }}</span>
+                          <span class="d-none d-md-inline d-lg-none d-xxl-inline ms-2 text-muted">{{ $proposalCount }}</span>
                         </div>
-                        <div class="col-auto d-flex align-items-center px-2">
-                          <span class="legend me-2 bg-warning"></span>
-                          <span>Em aberto</span>
-                          <span class="d-none d-md-inline d-lg-none d-xxl-inline ms-2 text-muted">12</span>
-                        </div>
-                        <div class="col-auto d-flex align-items-center px-2">
-                          <span class="legend me-2 bg-success"></span>
-                          <span>Adjudicadas</span>
-                          <span class="d-none d-md-inline d-lg-none d-xxl-inline ms-2 text-muted">10</span>
-                        </div>
-                        <div class="col-auto d-flex align-items-center px-2">
-                          <span class="legend me-2 bg-danger"></span>
-                          <span>Perdidas</span>
-                          <span class="d-none d-md-inline d-lg-none d-xxl-inline ms-2 text-muted">9</span>
-                        </div>
+                        @endforeach
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
           </div>
-          {{-- <div class="col-sm-6 col-lg-6">
-              <div class="card card-sm">
-                <div class="card-body">
-                  <div class="row align-items-center">
-                    <div class="col-auto">
-                      <span class="bg-green text-white avatar"><!-- Download SVG icon from http://tabler-icons.io/i/brand-twitter -->
-                          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-message-2-down" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                            <path d="M8 9h8"></path>
-                            <path d="M8 13h6"></path>
-                            <path d="M12.5 20.5l-.5 .5l-3 -3h-3a3 3 0 0 1 -3 -3v-8a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v5.5"></path>
-                            <path d="M19 16v6"></path>
-                            <path d="M22 19l-3 3l-3 -3"></path>
-                          </svg>
-                      </span>
-                    </div>
-                    <div class="col">
-                      <div class="font-weight-medium">
-                        133 solicitações tratadas
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-          </div> --}}
         </div>
       </div>
-      {{-- Advertisement --}}
-      {{-- <div class="col-12">
-        <div class="card card-md">
-          <div class="card-stamp card-stamp-lg">
-            <div class="card-stamp-icon bg-primary">
-              <!-- Download SVG icon from http://tabler-icons.io/i/ghost -->
-              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 11a7 7 0 0 1 14 0v7a1.78 1.78 0 0 1 -3.1 1.4a1.65 1.65 0 0 0 -2.6 0a1.65 1.65 0 0 1 -2.6 0a1.65 1.65 0 0 0 -2.6 0a1.78 1.78 0 0 1 -3.1 -1.4v-7" /><path d="M10 10l.01 0" /><path d="M14 10l.01 0" /><path d="M10 14a3.5 3.5 0 0 0 4 0" /></svg>
-            </div>
-          </div>
-          <div class="card-body">
-            <div class="row align-items-center">
-              <div class="col-10">
-                <h3 class="h1">Sistema de Gestão de Clientes</h3>
-                <div class="markdown text-muted">
-                  Faça a gestão de seus clientes da forma mais fácil e rápida à um custo super acessível. Entre em contacto connosco para ajudar você a atingir suas metas.
-                </div>
-                <div class="mt-3">
-                  <a href="https://fridoom.com" class="btn btn-primary" target="_blank" rel="noopener">
-                      Saiba mais
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> --}}
       {{-- Filters --}}
       <div class="col-12">
           <div class="card">
@@ -196,41 +133,105 @@ Propostas
               <table class="table table-vcenter table-mobile-md card-table">
                 <thead>
                   <tr>
-                    <th>Cliente</th>
-                    <th>Pedido</th>
+                    <th>Solicitação</th>
+                    <th>Proposta</th>
+                    <th>Tempo de Entrega</th>
                     <th>Responsáveis</th>
-                    <th></th>
+                    <th>Estado</th>
+                    <th>Data de Envio</th>
+                    <th>Válida até</th>
                     <th></th>
                     <th class="w-1"></th>
                   </tr>
                 </thead>
                 <tbody>
+                  @forelse ($generalData['proposalForTable'] as $proposal)
+                  @php
+                      $proposalTotalCost = $proposal->proposal_details->total_cost ?? 0;
+                      $proposalLeadTime = $proposal->proposal_details->lead_time ?? 'empty';
+                      $proposalSentDate = $proposal->proposal_details->sent_to_client_at ?? null;
+                      $proposalExpirationTime = $proposal->proposal_details->expiration_time ?? null;
+                  @endphp
                   <tr>
                     <td data-label="Client" >
                       <div class="d-flex py-1 align-items-center">
-                        <span class="avatar me-2" style="background-image: url({{ URL::to('dist/img/clients/unitel.png') }})"></span>
+                        
+                        @foreach ($proposal->request->clients as $key => $client)
+                          @if ($key == 0)
+                            @if ($client->company)
+                              @if ($client->company->logo_path)
+                              <span class="avatar me-2" style="background-image: url({{ URL::to($client->company->logo_path) }})"></span>
+                              @else
+                              <span class="avatar me-2"> {{ getTheInitialLetters($client->company->name) }} </span>
+                              @endif
+                            @else
+                              <span class="avatar me-2"> {{ getTheInitialLetters($client->fullname) }} </span>
+                            @endif
+                          @else
+                              
+                          @endif
+                        @endforeach
                         <div class="flex-fill">
-                          <div class="font-weight-medium">Isaquias Marques</div>
-                          <div class="text-muted"><a href="#" class="text-reset">isaquias.marques@unitel.co.ao</a></div>
+                          {{-- <div class="table-long-text long-title font-weight-medium">{{ $proposal->request->order }}</div> --}}
+                          <div class="text-muted table-long-tex lon-a" @style('max-width: 150px')><a href="#" class="text-reset">#Código: {{ $proposal->request->request_code }}</a></div>
                         </div>
                       </div>
                     </td>
-                    <td data-label="Order" >
-                      <div>Fornecimento de computadores portáteis</div>
-                      <div class="text-muted"><a href="#" class="text-reset">#Código: UNITEL-034</a></div>
+                    <td data-label="Proposal" >
+                      <div>Proposta {{ $proposalTypeLabelsTranslator[$proposal->type] }} Nº{{ str_pad($proposal->order_number, 2, '0', STR_PAD_LEFT) }}/{{ $proposal->year }}</div>
+                      <div class="text-muted"><a href="#" class="text-reset">Custo Total: {{ number_format($proposalTotalCost, 2, ',', '.') }} AO</a></div>
+                    </td>
+                    <td>
+                      <div></div>
+                      <div class="text-muted">{{ $proposalLeadTime }}</div>
                     </td>
                     <td data-label="Colab" >
                       <div>
                           <div class="avatar-list avatar-list-stacked">
-                              <span class="avatar avatar-sm rounded">{{ getTheInitialLetters('Álvaro Adolfo') }}</span>
-                              <span class="avatar avatar-sm rounded">{{ getTheInitialLetters('Sebastião Pedro') }}</span>
-                              <span class="avatar avatar-sm rounded">{{ getTheInitialLetters('Miguel Barros') }}</span>
+                            @foreach ($proposal->request->colaborators as $colaborator)
+                            <span class="avatar avatar-sm rounded">{{ getTheInitialLetters($colaborator->fullname) }}</span>
+                            @endforeach
                           </div>
                       </div>
                     </td>
                     <td data-label="Title" >
-                      <div class="text-muted">4 Cotações</div>
-                      <div class="text-muted">2 Propostas geradas</div>
+                      <div class="text-muted">
+                        <span class="badge bg-{{ $classColors[$proposal->status] }}">{{ $statusLabels[$proposal->status] ?? 'Outro' }}</span>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="text-muted">
+                        @if ($proposalSentDate !== null)
+                        {{ dateSeparator($proposalSentDate, '/') }}
+                        @else
+                        empty
+                        @endif
+                      </div>
+                    </td>
+                    <td class="text-muted" data-label="Role">
+                      @if ($proposalSentDate !== null && $proposalExpirationTime !== null)
+                        @php
+                            $expirationDateTransformed = addTimeToDate($proposalSentDate, $proposalExpirationTime);
+                        @endphp
+                        <div>{{ dateSeparator($expirationDateTransformed, '/') }}</div>
+                        <div class="text-muted">
+                          <span class="text-warning ">
+                            @php
+                                $dateDifference = date_difference($expirationDateTransformed, $proposalSentDate);
+                            @endphp
+                            @if ($dateDifference <= 5)
+                                <span class="text-danger">{{ ($dateDifference != "empty") ? $dateDifference . " dia".($dateDifference != 1 ? 's restantes' : ' restante') : 'empty' }}</span>
+                            @elseif ($dateDifference <= 10)
+                                <span class="text-yellow">{{ ($dateDifference != "empty") ? $dateDifference . " dias restantes" : 'empty' }}</span>
+                            @else
+                                <span class="text-green">{{ ($dateDifference != "empty") ? $dateDifference . " dias restantes" : 'empty' }}</span>
+                            @endif
+                          </span>
+                        </div>
+                          
+                      @else
+                          empty
+                      @endif
                     </td>
                     <td class="text-muted" data-label="Role" >
                       <div>
@@ -244,9 +245,9 @@ Propostas
                     </td>
                     <td>
                       <div class="btn-list flex-nowrap">
-                        <a href="#" class="btn btn-primary">
+                        {{-- <a href="#" class="btn btn-primary">
                           Visão geral
-                        </a>
+                        </a> --}}
                         <div class="dropdown">
                           <button class="btn dropdown-toggle align-text-top" data-bs-toggle="dropdown">
                             Ações
@@ -263,63 +264,9 @@ Propostas
                       </div>
                     </td>
                   </tr>
-                  <tr>
-                      <td data-label="Client" >
-                        <div class="d-flex py-1 align-items-center">
-                          <span class="avatar me-2" style="background-image: url({{ URL::to('dist/img/clients/multitel.jpeg') }})"></span>
-                          <div class="flex-fill">
-                            <div class="font-weight-medium">Isaquias Marques</div>
-                            <div class="text-muted"><a href="#" class="text-reset">isaquias.marques@multitel.co.ao</a></div>
-                          </div>
-                        </div>
-                      </td>
-                      <td data-label="Order" >
-                        <div>Fornecimento de Roteadores Cisco</div>
-                        <div class="text-muted"><a href="#" class="text-reset">#Código: MULTITEL-014</a></div>
-                      </td>
-                      <td data-label="Colab" >
-                        <div>
-                            <div class="avatar-list avatar-list-stacked">
-                                <span class="avatar avatar-sm rounded">{{ getTheInitialLetters('Álvaro Adolfo') }}</span>
-                                <span class="avatar avatar-sm rounded">{{ getTheInitialLetters('Sebastião Pedro') }}</span>
-                            </div>
-                        </div>
-                      </td>
-                      <td data-label="Title" >
-                        <div class="text-muted">1 Cotação</div>
-                        <div class="text-muted">1 Proposta gerada</div>
-                      </td>
-                      <td class="text-muted" data-label="Role" >
-                        <div>
-                            {{-- <span class="badge bg-success me-1"></span> --}}
-                        </div>
-                        <div class="text-muted">
-                            <div class="text-muted">
-                                {{-- No. de solicitações: 124 --}}
-                            </div>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="btn-list flex-nowrap">
-                          <a href="#" class="btn btn-primary">
-                            Visão geral
-                          </a>
-                          <div class="dropdown">
-                            <button class="btn dropdown-toggle align-text-top" data-bs-toggle="dropdown">
-                              Ações
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-end">
-                              <a class="dropdown-item" href="#">
-                                Editar
-                              </a>
-                              <a class="dropdown-item" href="#">
-                                Eliminar
-                              </a>
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
+                  @empty
+                      
+                  @endforelse
                 </tbody>
               </table>
             </div>

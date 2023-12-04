@@ -5,6 +5,7 @@ namespace Modules\Requests\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\DB;
 use Modules\Requests\Entities\ClientRequests;
 
 class RequestsController extends Controller
@@ -15,8 +16,27 @@ class RequestsController extends Controller
      */
     public function index()
     {
+
+        $allRequests = ClientRequests::select(DB::raw('Year(requested_at) as year'), DB::raw('count(*) as count'))
+                                                ->groupBy('year')
+                                                ->get()
+                                                ->pluck('count', 'year')
+                                                ->toArray();
+
+        $treatedRequests = ClientRequests::Where('treated', 1)->select(DB::raw('Year(requested_at) as year'), DB::raw('count(*) as count'))
+                                                ->groupBy('year')
+                                                ->get()
+                                                ->pluck('count', 'year')
+                                                ->toArray();
+
+        $unTreatedRequests = ClientRequests::Where('treated', 0)->select(DB::raw('Year(requested_at) as year'), DB::raw('count(*) as count'))
+                                                ->groupBy('year')
+                                                ->get()
+                                                ->pluck('count', 'year')
+                                                ->toArray();
+
         $requests = ClientRequests::orderBy('id', 'desc')->limit(20)->get();
-        return view('requests::pages.index', compact('requests'));
+        return view('requests::pages.index', compact('requests', 'allRequests', 'treatedRequests', 'unTreatedRequests'));
     }
 
     /**

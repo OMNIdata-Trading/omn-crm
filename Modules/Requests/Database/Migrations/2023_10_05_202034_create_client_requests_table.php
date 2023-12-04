@@ -18,6 +18,12 @@ return new class extends Migration
                   ->nullable();
             $table->string('request_code')
                   ->unique();
+            $table->boolean('treated')
+                  ->default(0);
+            $table->foreignId('id_income_method')
+                  ->nullable()
+                  ->constrained('request_income_methods')
+                  ->nullOnDelete();
             $table->date('requested_at')->nullable();
             $table->timestamps();
         });

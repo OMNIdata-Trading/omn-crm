@@ -27,12 +27,17 @@
       	font-feature-settings: "cv03", "cv04", "cv11";
       }
       .table-long-text{
-          max-width: 250px;
           display: -webkit-box;
           -webkit-line-clamp: 1;
           -webkit-box-orient: vertical;
           overflow: hidden;
           text-overflow: ellipsis;
+      }
+      .long-title{
+          max-width: 250px;
+      }
+      .long-a{
+          max-width: 170px;
       }
     </style>
 

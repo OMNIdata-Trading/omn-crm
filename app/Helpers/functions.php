@@ -96,15 +96,37 @@ function existsObjectInArray($array, $item, $property)
 function date_difference($date1, $date2, $income_format = 'days')
 {
     // $income_format: y|m|d|h|i|s|weekday|days
+    if($date1 == null || $date2 == null){
+        return "empty";
+    }
 
     $date1 = new DateTime($date1);
     $date2 = new DateTime($date2);
 
-   return $date1->diff($date2)->$income_format;
+    return $date1->diff($date2)->$income_format;
+}
+
+function addTimeToDate($date1, $humanizedTime)
+{
+    if($date1 == null || $humanizedTime == null){
+        return "empty";
+    }
+    $date1 = new DateTime($date1);
+    $date1->modify("+$humanizedTime");
+
+   return $date1->format('d-m-Y');
 }
 
 function dateSeparator($date, $separator = '-')
 {
+    if($date == null){
+        return 'empty';
+    }
     $date = new DateTime($date);
     return $date->format("d".$separator."m".$separator."Y");
+}
+
+function getThePercentage($number, $total)
+{
+    return (100 * $number) / $total . "%";
 }

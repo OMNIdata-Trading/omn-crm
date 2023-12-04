@@ -40,97 +40,31 @@ Solicitações
 @section('account.page.content')
 <div class="row row-deck row-cards">
   <div class="col-sm-6 col-lg-3">
-    <div class="card">
-      <div class="card-body">
-        <div class="d-flex align-items-center">
-          <div class="subheader">Total de Cotações</div>
-          <div class="ms-auto lh-1">
-            <div class="dropdown">
-              <a class="dropdown-toggle text-muted" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                2023
-              </a>
-              <div class="dropdown-menu dropdown-menu-end">
-                <a class="dropdown-item active" href="#">2022</a>
-                <a class="dropdown-item" href="#">2021</a>
-                <a class="dropdown-item" href="#">2020</a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="d-flex align-items-baseline">
-          <div class="h1 mb-3 me-2">{{ $quotations->count() }}</div>
-          <div class="me-auto">
-            {{-- <span class="text-green d-inline-flex align-items-center lh-1">
-              4% <!-- Download SVG icon from http://tabler-icons.io/i/trending-up -->
-              <svg xmlns="http://www.w3.org/2000/svg" class="icon ms-1" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 17l6 -6l4 4l8 -8" /><path d="M14 7l7 0l0 7" /></svg>
-            </span> --}}
-          </div>
-        </div>
-        <div id="chart-all-requests" class="chart-sm"></div>
-      </div>
-    </div>
+    @livewire('apex-charts', [
+      'label' => 'Total de cotações',
+      'chartColor' => 'primary',
+      'chartBarLabel' => 'Recebidas',
+      'chartId' => 'total-quotations',
+      'chartData' => $quotationsCount
+    ])
   </div>
   <div class="col-sm-6 col-lg-3">
-      <div class="card">
-        <div class="card-body">
-          <div class="d-flex align-items-center">
-            <div class="subheader">Cotações respondidas</div>
-            <div class="ms-auto lh-1">
-              <div class="dropdown">
-                <a class="dropdown-toggle text-muted" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  2023
-                </a>
-                <div class="dropdown-menu dropdown-menu-end">
-                  <a class="dropdown-item active" href="#">2022</a>
-                  <a class="dropdown-item" href="#">2021</a>
-                  <a class="dropdown-item" href="#">2020</a>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="d-flex align-items-baseline">
-            <div class="h1 mb-3 me-2 text-success">6</div>
-            <div class="me-auto">
-              {{-- <span class="text-green d-inline-flex align-items-center lh-1">
-                4% <!-- Download SVG icon from http://tabler-icons.io/i/trending-up -->
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon ms-1" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 17l6 -6l4 4l8 -8" /><path d="M14 7l7 0l0 7" /></svg>
-              </span> --}}
-            </div>
-          </div>
-          <div id="chart-treated-requests" class="chart-sm"></div>
-        </div>
-      </div>
+    @livewire('apex-charts', [
+      'label' => 'Cotações respondidas',
+      'chartColor' => 'success',
+      'chartBarLabel' => 'Recebidas',
+      'chartId' => 'responsed-quotations',
+      'chartData' => $responsedQuotationsCount
+    ])
   </div>
   <div class="col-sm-6 col-lg-3">
-      <div class="card">
-        <div class="card-body">
-          <div class="d-flex align-items-center">
-            <div class="subheader">Cotações não respondidas</div>
-            <div class="ms-auto lh-1">
-              <div class="dropdown">
-                <a class="dropdown-toggle text-muted" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  2023
-                </a>
-                <div class="dropdown-menu dropdown-menu-end">
-                  <a class="dropdown-item active" href="#">2022</a>
-                  <a class="dropdown-item" href="#">2021</a>
-                  <a class="dropdown-item" href="#">2020</a>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="d-flex align-items-baseline">
-            <div class="h1 mb-3 me-2 text-danger">45</div>
-            <div class="me-auto">
-              {{-- <span class="text-green d-inline-flex align-items-center lh-1">
-                4% <!-- Download SVG icon from http://tabler-icons.io/i/trending-up -->
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon ms-1" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 17l6 -6l4 4l8 -8" /><path d="M14 7l7 0l0 7" /></svg>
-              </span> --}}
-            </div>
-          </div>
-          <div id="chart-not-treated-requests" class="chart-sm"></div>
-        </div>
-      </div>
+    @livewire('apex-charts', [
+      'label' => 'Cotações não respondidas',
+      'chartColor' => 'danger',
+      'chartBarLabel' => 'Não recebida',
+      'chartId' => 'no-response-quotations',
+      'chartData' => $noResponseQuotationsCount
+    ])
   </div>
   <div class="col-12">
     <div class="row row-cards">
@@ -283,11 +217,16 @@ Solicitações
                       </th>
                   </tr>
                     @foreach ($organizedQuotation['quotations'] as $requestQuotations)
+                    @php
+                        $filePath = $requestQuotations->file->file_path ?? null;
+                        $fileName = $requestQuotations->file->file_name ?? 'empty';
+                        $responsedAt = $requestQuotations->responsed_at ?? null;
+                    @endphp
                     <tr>
                         <td>
-                            @if ($requestQuotations->file->file_path)
-                            <a href="{{ URL::to('storage/' . $requestQuotations->file->file_path )}}" target="_blank">
-                                {{ $requestQuotations->file->file_name }}
+                            @if ($filePath !== null)
+                            <a href="{{ URL::to('storage/' . $filePath )}}" target="_blank">
+                                {{ $fileName }}
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-paperclip" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                                     <path d="M15 7l-6.5 6.5a1.5 1.5 0 0 0 3 3l6.5 -6.5a3 3 0 0 0 -6 -6l-6.5 6.5a4.5 4.5 0 0 0 9 9l6.5 -6.5" />
@@ -295,12 +234,12 @@ Solicitações
                             </a>
                             @else
                             <div class="text-muted">
-                              {{ $requestQuotations->file->file_name }}
+                              {{ $fileName }}
                             </div>
                             @endif
                         </td>
                         <td class="text-center"><!-- Download SVG icon from http://tabler-icons.io/i/check -->
-                          @if ($requestQuotations->responsed_at)
+                          @if ($responsedAt !== null)
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon text-green" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10" /></svg>
                           @else
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon text-red" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M18 6l-12 12"></path><path d="M6 6l12 12"></path></svg>
@@ -311,14 +250,11 @@ Solicitações
                               $dateDifference = date_difference($requestQuotations->responsed_at ?? date('Y-m-d'), $requestQuotations->requested_at)
                           @endphp
                           @if ($dateDifference <= 5)
-                          <span class="badge bg-green">{{ $dateDifference }} dia{{ $dateDifference > 1 ? 's': '' }}</span>
-                          
-                          @elseif ($dateDifference > 5 && $dateDifference < 10)
-                          <span class="badge bg-yellow">{{ $dateDifference }} dias</span>
-                          
+                              <span class="badge bg-green">{{ $dateDifference }} dia{{ $dateDifference != 1 ? 's' : '' }}</span>
+                          @elseif ($dateDifference <= 10)
+                              <span class="badge bg-yellow">{{ $dateDifference }} dias</span>
                           @else
-                          <span class="badge bg-red">{{ $dateDifference }} dias</span>
-                            
+                              <span class="badge bg-red">{{ $dateDifference }} dias</span>
                           @endif
                         </td>
                         <td class="text-center">

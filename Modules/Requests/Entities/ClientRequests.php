@@ -19,9 +19,16 @@ class ClientRequests extends Model
         'order',
         'description',
         'request_code',
-        'requested_at'
+        'requested_at',
+        'id_income_method',
+        'treated'
     ];
 
+    public function incomeMethod()
+    {
+        return $this->belongsTo(RequestIncomeMethod::class, 'id_income_method', 'id');
+    }
+    
     public function clients()
     {
         return $this->belongsToMany(ClientColaboratorRequester::class, 'requester_and_client_requests', 'id_requests', 'id_client_requester');

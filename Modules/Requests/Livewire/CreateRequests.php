@@ -2,15 +2,18 @@
 
 namespace Modules\Requests\Livewire;
 
+use DateTime;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Rule;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\WithFileUploads;
 use Modules\Colaborators\Entities\Colaborator;
 use Modules\Leads\Entities\ClientColaboratorRequester;
 use Modules\Leads\Entities\ClientCompany;
 use Modules\Requests\Entities\ClientRequests;
+use Modules\Requests\Entities\RequestIncomeMethod;
 use Modules\Storage\Entities\RequestFiles;
 use Modules\Tasks\Entities\Task;
 
@@ -25,10 +28,14 @@ class CreateRequests extends Component
     public $clientCompanyColaborators;
     #[Rule('required')]
     public $order;
-    
+    public $incomeMethods;
+
     public $requestCode;
     #[Rule('required')]
+
     public $requestDate;
+    private $requestYear;
+    
     public $allColaborators;
     public $description;
     public $hasTasks = false;
@@ -39,6 +46,7 @@ class CreateRequests extends Component
     public $attachmentsDescriptions;
     
     //
+    public $selectedIncomeMethod;
     public $idSelectedCompany;
     public $selectedCompany;
     public $idClientColaborator;
@@ -47,7 +55,10 @@ class CreateRequests extends Component
 
     public $hasSingularClient;
 
+
     public $count = 0;
+
+    // public $errors = [];
 
     // events
     protected $listeners = [
@@ -58,6 +69,8 @@ class CreateRequests extends Component
     public function mount(){
         $this->getClientCompanies();
         $this->clientCompanyColaborators = [];
+
+        $this->incomeMethods = RequestIncomeMethod::all();
 
         $this->allColaborators = Colaborator::get();
         $this->selectedColaborators = [];
@@ -103,6 +116,23 @@ class CreateRequests extends Component
         
     }
 
+    public function getYearFromRequestDate()
+    {
+
+        if(empty($this->requestDate)){
+            $this->requestYear = null;
+            return;
+        }
+        $dateObject = DateTime::createFromFormat('Y-m-d', $this->requestDate);
+        if(!$dateObject){
+            $this->requestYear = null;
+            return;
+        }
+        $this->requestYear = $dateObject->format('Y');
+
+        $this->regenerateRequestCode();
+    }
+
     public function getColaboratorsOfCompany(){
         if($this->idSelectedCompany != 0){
             $this->selectedCompany = ClientCompany::find($this->idSelectedCompany);
@@ -123,6 +153,16 @@ class CreateRequests extends Component
         }
     }
 
+    private function regenerateRequestCode()
+    {
+        if($this->selectedCompany != null && $this->idSelectedCompany != 0){
+            $this->generateRequestCode();
+
+        }elseif($this->idSelectedCompany == 0 && $this->clientCompanyColaborators != null && $this->selectedCompany == null){
+            $this->generateRequestCodeForSingularClients();
+        }
+    }
+
     private function generateRequestCode(){
 
         if($this->selectedCompany != null && $this->idSelectedCompany != 0){
@@ -135,11 +175,11 @@ class CreateRequests extends Component
             $nameExploded = explode(' ', $companyName);
 
             foreach($this->clientCompanyColaborators as $clientColaborator){
-                $totalOfRequestsFromCompany += $clientColaborator->requests()->whereYear('requested_at', date('Y'))->count();
+                $totalOfRequestsFromCompany += $clientColaborator->requests()->whereYear('requested_at', ($this->requestYear ?? date('Y')))->count();
             }
     
             $theNextRequestCodeOrder = $totalOfRequestsFromCompany + 1;
-            $generatedCode = str_replace(' ', '_', removeAccent(strtoupper($nameExploded[0]))) . "-RQ-$theNextRequestCodeOrder/".date('Y');
+            $generatedCode = str_replace(' ', '_', removeAccent(strtoupper($nameExploded[0]))) . "-RQ-$theNextRequestCodeOrder/".($this->requestYear ?? date('Y'));
             
             $this->requestCode = $generatedCode;
         }
@@ -155,10 +195,10 @@ class CreateRequests extends Component
             $clientColaboratorName = $this->selectedClientColaborator->fullname;
             $nameExploded = explode(' ', $clientColaboratorName);
     
-            $totalOfRequestsFromSingularClient += $this->selectedClientColaborator->requests()->whereYear('requested_at', date('Y'))->count();
+            $totalOfRequestsFromSingularClient += $this->selectedClientColaborator->requests()->whereYear('requested_at', ($this->requestYear ?? date('Y')))->count();
     
             $theNextRequestCodeOrder = $totalOfRequestsFromSingularClient + 1;
-            $generatedCode = str_replace(' ', '_', removeAccent(strtoupper($nameExploded[0]))) .'-'. str_replace(' ', '_', removeAccent(strtoupper($nameExploded[1]))) . "-RQ-$theNextRequestCodeOrder/".date('Y');
+            $generatedCode = str_replace(' ', '_', removeAccent(strtoupper($nameExploded[0]))) .'-'. str_replace(' ', '_', removeAccent(strtoupper($nameExploded[1]))) . "-RQ-$theNextRequestCodeOrder/".($this->requestYear ?? date('Y'));
             
             $this->requestCode = $generatedCode;
         }
@@ -210,6 +250,15 @@ class CreateRequests extends Component
         unset($this->attachmentsDescriptions[$index]);
     }
 
+    public function validateDescription(){
+        $this->validate([
+            'description' => 'max:500'
+        ],
+        [
+            'description.max' => 'A descrição não pode ter mais de :max caracteres'
+        ]);
+    }
+
     public function store(){
 
         $requestCodeExistent = ClientRequests::where('request_code', $this->requestCode)->get()->count();
@@ -222,7 +271,8 @@ class CreateRequests extends Component
             'order' => $this->order,
             'description' => $this->description,
             'request_code' => $this->requestCode,
-            'requested_at' => $this->requestDate
+            'requested_at' => $this->requestDate,
+            'id_income_method' => $this->selectedIncomeMethod
         ]);
 
         if(!$latestRequest){

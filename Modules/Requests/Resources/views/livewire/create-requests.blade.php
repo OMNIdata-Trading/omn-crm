@@ -28,7 +28,7 @@
     <form class="card" enctype="multipart/form-data" wire:submit='store'>
         <div class="card-body">
           <div class="row row-cards">
-            <div class="col-md-6">
+            <div class="col-sm-6 col-md-4">
               <div class="mb-3">
                 <label class="form-label required">Empresa</label>
                 {{--  --}}
@@ -60,7 +60,7 @@
                 </select>
               </div>
             </div>
-            <div class="col-sm-6 col-md-6">
+            <div class="col-sm-6 col-md-4">
                 <label for="select-client-company-colaborators required" class="form-label">Responsável</label>
                 <select
                 required
@@ -81,6 +81,24 @@
                     @endforelse
                 </select>
             </div>
+            <div class="col-sm-6 col-md-4">
+              <label for="income-method required" class="form-label">Método de Entrada</label>
+                <select
+                required
+                type="text"
+                class="form-select"
+                wire:model='selectedIncomeMethod'
+                >
+                  <option value="" selected>-- Seleccione o responsável --</option>
+                    @forelse ($incomeMethods as $method)
+                        <option value="{{ $method->id }}">
+                            {{ $method->name }}
+                        </option>
+                    @empty
+                        <option value="no-records" disabled>-- No records --</option>
+                    @endforelse
+                </select>
+            </div>
             <div class="col-sm-6 col-md-6">
               <div class="mb-3">
                 <label class="form-label required">Pedido</label>
@@ -90,7 +108,15 @@
             <div class="col-sm-6 col-md-3">
               <div class="mb-3">
                 <label class="form-label required">Data da solicitação</label>
-                <input type="date" required wire:model='requestDate' class="form-control" placeholder="" max="{{ date('Y-m-d') }}" value="">
+                <input
+                type="date"
+                required
+                wire:model='requestDate'
+                wire:change='getYearFromRequestDate'
+                class="form-control"
+                placeholder=""
+                max="{{ date('Y-m-d') }}"
+                value="">
               </div>
             </div>
             <div class="col-sm-6 col-md-3">
@@ -100,10 +126,14 @@
               </div>
             </div>
             <div class="col-md-12">
-              <div class="mb-3 mb-0">
+              <div class="mb-2">
                 <label class="form-label">Descrição</label>
-                <textarea rows="5" wire:model='description' class="form-control" placeholder="Descrição da solicitação"></textarea>
+                <textarea rows="5" wire:model='description' maxlength="500" wire:keyup='validateDescription' maxlength="" class="form-control" placeholder="Descrição da solicitação"></textarea>
+                <small class="form-hint">{{ strlen($description) }}/500 caractéres</small>
               </div>
+              @error('description')
+              <span class="text-small text-muted text-red">{{ $message }}</span>
+              @enderror
             </div>
 
             {{-- Media --}}

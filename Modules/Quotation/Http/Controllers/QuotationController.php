@@ -6,8 +6,10 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Modules\Quotation\Entities\Quotation;
 use Modules\Quotation\Http\Requests\QuotationRequest;
+use Modules\Requests\Entities\ClientRequests;
 use Modules\Storage\Entities\QuotationFiles;
 
 class QuotationController extends Controller
@@ -18,6 +20,25 @@ class QuotationController extends Controller
      */
     public function index()
     {
+
+        $quotationsCount = Quotation::select(DB::raw('Year(requested_at) as year'), DB::raw('count(*) as count'))
+                                    ->groupBy('year')
+                                    ->get()
+                                    ->pluck('count', 'year')
+                                    ->toArray();
+        
+        $responsedQuotationsCount = Quotation::where('responsed_at', '!=', null)->select(DB::raw('Year(requested_at) as year'), DB::raw('count(*) as count'))
+                                    ->groupBy('year')
+                                    ->get()
+                                    ->pluck('count', 'year')
+                                    ->toArray();
+
+        $noResponseQuotationsCount = Quotation::where('responsed_at', '=', null)->select(DB::raw('Year(requested_at) as year'), DB::raw('count(*) as count'))
+                                    ->groupBy('year')
+                                    ->get()
+                                    ->pluck('count', 'year')
+                                    ->toArray();
+
         $organizedQuotationsByRequests = [];
         $quotations = Quotation::limit(20)->get();
 
@@ -29,7 +50,14 @@ class QuotationController extends Controller
             $organizedQuotationsByRequests[$quotation->request->request_code]['quotations'] = $quotation->request->quotations;
         }
 
-        return view('quotation::pages.index', compact('quotations', 'organizedQuotationsByRequests'));
+        return view('quotation::pages.index',
+        compact(
+            'quotations',
+            'organizedQuotationsByRequests',
+            'quotationsCount',
+            'responsedQuotationsCount',
+            'noResponseQuotationsCount'
+        ));
     }
 
     /**
@@ -65,7 +93,11 @@ class QuotationController extends Controller
             'id_request' => $request['id_request'],
         ]);
 
-        if($latestQuotation){
+        $requestStatus = ClientRequests::find($request['id_request'])->update([
+            'treated' => 1
+        ]);
+
+        if($latestQuotation && $requestStatus){
 
             if($request->file('file')){
                 $file_path = $request->file('file')->store("quotations/$vendor/$year/$month/$day", 'public');
@@ -83,6 +115,8 @@ class QuotationController extends Controller
 
             return redirect()->route('account.business.quotations.index');
         }
+        
+        return redirect()->route('account.business.quotations.create')->withErrors('Não foi possível registrar esta cotação');
 
     }
 
