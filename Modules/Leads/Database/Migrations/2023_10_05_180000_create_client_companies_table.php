@@ -26,6 +26,8 @@ return new class extends Migration
                   ->nullable();
             $table->string('activity_area')
                   ->nullable();
+            $table->year('first_purchase_year')
+                  ->nullable();
             $table->enum('status', ['lead', 'client']);
             $table->timestamps();
         });

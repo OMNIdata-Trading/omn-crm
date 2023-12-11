@@ -1,4 +1,4 @@
-<div>
+<div style="width: 100%;">
     <div class="card">
         <div class="card-body">
           <div class="d-flex align-items-center">
@@ -18,7 +18,7 @@
             </div>
           </div>
           <div class="d-flex align-items-baseline">
-            <div class="h1 mb-3 me-2">{{ $currentYearHighlightValue }}</div>
+            <div class="h1 mb-3 me-2">{{ $currentYearHighlightValue ?? 0 }}</div>
             <div class="me-auto">
               {{-- <span class="text-green d-inline-flex align-items-center lh-1">
                 4% <!-- Download SVG icon from http://tabler-icons.io/i/trending-up -->

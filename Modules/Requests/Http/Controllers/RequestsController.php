@@ -17,23 +17,24 @@ class RequestsController extends Controller
     public function index()
     {
 
-        $allRequests = ClientRequests::select(DB::raw('Year(requested_at) as year'), DB::raw('count(*) as count'))
+        $allRequests = ClientRequests::orderBy('year', 'desc')->select(DB::raw('Year(requested_at) as year'), DB::raw('count(*) as count'))
                                                 ->groupBy('year')
                                                 ->get()
                                                 ->pluck('count', 'year')
                                                 ->toArray();
 
-        $treatedRequests = ClientRequests::Where('treated', 1)->select(DB::raw('Year(requested_at) as year'), DB::raw('count(*) as count'))
+        $treatedRequests = ClientRequests::orderBy('year', 'desc')->where('treated', 1)->select(DB::raw('Year(requested_at) as year'), DB::raw('count(*) as count'))
                                                 ->groupBy('year')
                                                 ->get()
                                                 ->pluck('count', 'year')
                                                 ->toArray();
 
-        $unTreatedRequests = ClientRequests::Where('treated', 0)->select(DB::raw('Year(requested_at) as year'), DB::raw('count(*) as count'))
+        $unTreatedRequests = ClientRequests::orderBy('year', 'desc')->where('treated', 0)->select(DB::raw('Year(requested_at) as year'), DB::raw('count(*) as count'))
                                                 ->groupBy('year')
                                                 ->get()
                                                 ->pluck('count', 'year')
                                                 ->toArray();
+
 
         $requests = ClientRequests::orderBy('id', 'desc')->limit(20)->get();
         return view('requests::pages.index', compact('requests', 'allRequests', 'treatedRequests', 'unTreatedRequests'));

@@ -26,7 +26,7 @@ class ProposalsController extends Controller
         $statusLabels = [
             'opened' => 'Em Aberto',
             'negotiation' => 'Negociação',
-            'accepted' => 'Adjudicadas',
+            'accepted' => 'Adjudicada',
             'lost' => 'Perdidas'
         ];
 
@@ -42,8 +42,8 @@ class ProposalsController extends Controller
             'proposalsForTable' => []
         ];
 
-        $model =  Proposal::whereYear('created_at', date('Y'));
-        $proposals = $model->get()->count();
+        $model =  Proposal::where('year', date('Y'));
+        $proposalsCount = $model->get()->count();
         $generalData['proposalForTable'] = $model->limit(20)->get();
 
         $proposalStatusCounts = $model->select('status', DB::raw('count(*) as count'))
@@ -51,7 +51,7 @@ class ProposalsController extends Controller
                                     ->get();
         
         $generalData['proposalsStatus'] = $proposalStatusCounts->pluck('count', 'status')->toArray();
-        $generalData['countProposalsFromCurrentYear'] = $proposals;
+        $generalData['countProposalsFromCurrentYear'] = $proposalsCount;
 
         return view('proposals::pages.index', compact('generalData', 'classColors', 'statusLabels', 'proposalTypeLabelsTranslator'));
     }

@@ -23,6 +23,10 @@ return new class extends Migration
                   ->nullable();
             $table->string('phone_number3')
                   ->nullable();
+            $table->year('first_purchase_year')
+                  ->nullable();
+            $table->enum('status', ['lead', 'client'])
+                  ->nullable();
             $table->foreignId('id_client_company')
                   ->nullable()
                   ->constrained('client_companies')

@@ -40,7 +40,7 @@ Solicitações
 @section('account.page.content')
 <div class="row row-deck row-cards">
   <div class="col-sm-6 col-lg-3">
-    @livewire('apex-charts', [
+    @livewire('apex-chart-bar', [
       'label' => 'Todas as solicitações',
       'chartColor' => 'primary',
       'chartBarLabel' => 'Recebidas',
@@ -49,7 +49,7 @@ Solicitações
     ])
   </div>
   <div class="col-sm-6 col-lg-3">
-    @livewire('apex-charts', [
+    @livewire('apex-chart-bar', [
       'label' => 'Solicitações tratadas',
       'chartColor' => 'success',
       'chartBarLabel' => 'Tratadas',
@@ -58,7 +58,7 @@ Solicitações
     ])
   </div>
   <div class="col-sm-6 col-lg-3">
-    @livewire('apex-charts', [
+    @livewire('apex-chart-bar', [
       'label' => 'Solicitações não tratadas',
       'chartColor' => 'danger',
       'chartBarLabel' => 'Não tratadas',

@@ -21,19 +21,19 @@ class QuotationController extends Controller
     public function index()
     {
 
-        $quotationsCount = Quotation::select(DB::raw('Year(requested_at) as year'), DB::raw('count(*) as count'))
+        $quotationsCount = Quotation::orderBy('year', 'desc')->select(DB::raw('Year(requested_at) as year'), DB::raw('count(*) as count'))
                                     ->groupBy('year')
                                     ->get()
                                     ->pluck('count', 'year')
                                     ->toArray();
         
-        $responsedQuotationsCount = Quotation::where('responsed_at', '!=', null)->select(DB::raw('Year(requested_at) as year'), DB::raw('count(*) as count'))
+        $responsedQuotationsCount = Quotation::orderBy('year', 'desc')->where('responsed_at', '!=', null)->select(DB::raw('Year(requested_at) as year'), DB::raw('count(*) as count'))
                                     ->groupBy('year')
                                     ->get()
                                     ->pluck('count', 'year')
                                     ->toArray();
 
-        $noResponseQuotationsCount = Quotation::where('responsed_at', '=', null)->select(DB::raw('Year(requested_at) as year'), DB::raw('count(*) as count'))
+        $noResponseQuotationsCount = Quotation::orderBy('year', 'desc')->where('responsed_at', '=', null)->select(DB::raw('Year(requested_at) as year'), DB::raw('count(*) as count'))
                                     ->groupBy('year')
                                     ->get()
                                     ->pluck('count', 'year')

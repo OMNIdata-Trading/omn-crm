@@ -163,7 +163,12 @@
             <div class="col-sm-6 col-md-4">
               <div class="mb-3">
                 <label class="form-label">Custo Total</label>
-                <input type="text" class="form-control" wire:model='proposalTotalCost' placeholder="">
+                <input
+                type="text"
+                class="form-control"
+                wire:model.live='proposalTotalCost'
+                placeholder="">
+                <small class="form-hint">{{ ($proposalTotalCost) ? number_format($proposalTotalCost, '2', ',', '.') : number_format(0, '2', ',', '.') }}</small>
               </div>
             </div>
             <div class="col-sm-6 col-md-2">

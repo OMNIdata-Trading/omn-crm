@@ -4,6 +4,7 @@ namespace Modules\Leads\Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
+use Modules\Leads\Entities\ClientColaboratorRequester;
 
 class LeadsDatabaseSeeder extends Seeder
 {
@@ -14,8 +15,9 @@ class LeadsDatabaseSeeder extends Seeder
      */
     public function run()
     {
-        Model::unguard();
-
-        // $this->call("OthersTableSeeder");
+        $this->call([
+            ClientCompanySeederTableSeeder::class,
+            ClientColaboratorSeederTableSeeder::class,
+        ]);
     }
 }

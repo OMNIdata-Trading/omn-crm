@@ -16,6 +16,7 @@ class ClientCompany extends Model
         'website',
         'company_email',
         'activity_area',
+        'first_purchase_year',
         'status'
     ];
 

@@ -16,6 +16,8 @@ class ClientColaboratorRequester extends Model
         'phone_number1',
         'phone_number2',
         'phone_number3',
+        'first_purchase_year',
+        'status',
         'id_client_company'
     ];
 

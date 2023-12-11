@@ -4,7 +4,7 @@ namespace App\Livewire;
 
 use Livewire\Component;
 
-class ApexCharts extends Component
+class ApexChartBar extends Component
 {
     public $label;
     public $currentYearHighlightValue;
@@ -20,7 +20,6 @@ class ApexCharts extends Component
 
     public function mount()
     {
-        // dd($this->chartData);
         $this->dataProccess();
     }
 
@@ -48,6 +47,6 @@ class ApexCharts extends Component
 
     public function render()
     {
-        return view('livewire.apex-charts');
+        return view('livewire.apex-chart-bar');
     }
 }

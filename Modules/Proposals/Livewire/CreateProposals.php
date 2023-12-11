@@ -36,7 +36,7 @@ class CreateProposals extends Component
     public $selectedProposalStatus = 1; // Aberto
     public $selectedCurrency = 1; // AO
 
-    public $proposalTotalCost;
+    public $proposalTotalCost = 0;
     public $proposalLeadTime;
     public $proposalExpiration = 15;
     public $selectedProposalExpirationUnity = "days"; // Dia(s)
@@ -113,6 +113,7 @@ class CreateProposals extends Component
 
     public function store()
     {
+
         $this->validate(
             [
                 'idSelectedRequest' => 'required',
@@ -160,7 +161,11 @@ class CreateProposals extends Component
             'status' => $this->selectedProposalStatus 
         ]);
 
-        if(!$latestProposal){
+        $requestStatus = ClientRequests::find($this->idSelectedRequest)->update([
+            'treated' => 1
+        ]);
+
+        if(!$latestProposal && !$requestStatus){
             session()->flash('error', 'Não foi possível criar esta proposta, verifique os seus dados');
             return;
         }
