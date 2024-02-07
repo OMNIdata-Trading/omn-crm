@@ -206,7 +206,7 @@
                         Tarefas
                         <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
                       </a>
-                      <a class="dropdown-item" href="./empty.html">
+                      <a class="dropdown-item" href="{{ route('account.overview.goals.index') }}">
                         Metas
                       </a>
                     </div>

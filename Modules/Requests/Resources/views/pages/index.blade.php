@@ -86,7 +86,7 @@ Solicitações
               </div>
               <div class="col">
                 <div class="font-weight-medium">
-                  {{ $requests->count() }} Solicitações recebidas ({{ date('Y') }})
+                  {{ $requestsForCardsStatistics->count() }} Solicitações recebidas ({{ date('Y') }})
                 </div>
               </div>
             </div>
@@ -113,7 +113,7 @@ Solicitações
                   <div class="font-weight-medium">
                     @php
                         $treatedRequests = 0;
-                        foreach ($requests as $key => $request) {
+                        foreach ($requestsForCardsStatistics as $key => $request) {
                           if($request->proposals->count() > 0){
                             $treatedRequests += $request->proposals->count();
                           }
@@ -214,7 +214,7 @@ Solicitações
               </tr>
             </thead>
             <tbody>
-              @foreach ($requests as $request)
+              @foreach ($requestsForTable as $request)
               <tr>
                 <td data-label="Client" >
                   <div class="d-flex py-1 align-items-center">

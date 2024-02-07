@@ -16,7 +16,6 @@ class RequestsController extends Controller
      */
     public function index()
     {
-
         $allRequests = ClientRequests::orderBy('year', 'desc')->select(DB::raw('Year(requested_at) as year'), DB::raw('count(*) as count'))
                                                 ->groupBy('year')
                                                 ->get()
@@ -35,9 +34,11 @@ class RequestsController extends Controller
                                                 ->pluck('count', 'year')
                                                 ->toArray();
 
+        $requestsForCardsStatistics = ClientRequests::orderBy('id', 'desc')->whereYear('requested_at', date('Y'))->limit(20)->get();
 
-        $requests = ClientRequests::orderBy('id', 'desc')->limit(20)->get();
-        return view('requests::pages.index', compact('requests', 'allRequests', 'treatedRequests', 'unTreatedRequests'));
+
+        $requestsForTable = ClientRequests::orderBy('id', 'desc')->limit(20)->get();
+        return view('requests::pages.index', compact('requestsForCardsStatistics', 'requestsForTable', 'allRequests', 'treatedRequests', 'unTreatedRequests'));
     }
 
     /**

@@ -14,7 +14,7 @@ class GoalsController extends Controller
      */
     public function index()
     {
-        return view('goals::index');
+        return view('goals::pages.index');
     }
 
     /**

@@ -16,10 +16,86 @@ class LeadsController extends Controller
      */
     public function index()
     {
+        
+        $newClients = $this->getNewClientsData();
+        $newLeads = $this->getNewLeadsData();
+
         $leads = ClientCompany::limit(20)->get();
         $singularLeads[] = ClientColaboratorRequester::where('id_client_company', null)->limit(20)->get();
         // dd($leads);
-        return view('leads::pages.index', compact('leads', 'singularLeads'));
+        return view('leads::pages.index', compact('leads', 'singularLeads', 'newClients', 'newLeads'));
+    }
+
+    public function getNewClientsData()
+    {
+        $newClients = [];
+        $newClientCompanies = [];
+        $newSingularClients = [];
+
+        $getAllYearsWithNewClientCompanies = ClientCompany::whereNotNull('first_purchase_year')->distinct()
+                                                                        ->orderBy('first_purchase_year', 'desc')
+                                                                        ->get('first_purchase_year')
+                                                                        ->pluck('first_purchase_year')
+                                                                        ->toArray();
+
+        $getAllYearsWithNewClientColab = ClientColaboratorRequester::whereNotNull('first_purchase_year')->distinct()
+                                                                        ->orderBy('first_purchase_year', 'desc')
+                                                                        ->get('first_purchase_year')
+                                                                        ->pluck('first_purchase_year')
+                                                                        ->toArray();
+
+        $datesMerged = array_unique(array_merge($getAllYearsWithNewClientCompanies, $getAllYearsWithNewClientColab));
+        rsort($datesMerged);
+
+        foreach($datesMerged as $date){
+
+            $newClientCompanies = ClientCompany::where('first_purchase_year', $date)->get()->count();
+            $newSingularClients = ClientColaboratorRequester::where('first_purchase_year', $date)->get()->count();
+            
+            $newClients[$date] = $newSingularClients + $newClientCompanies;
+
+        }
+
+        return $newClients;
+    }
+
+    public function getNewLeadsData()
+    {
+        $newClients = [];
+        $newClientCompanies = [];
+        $newSingularClients = [];
+
+        $getAllYearsWithNewClientCompanies = ClientCompany::whereNull('first_purchase_year')
+                                                            ->distinct()
+                                                            ->where('status', 'lead')
+                                                            ->orderBy('created_at', 'desc')
+                                                            ->get('created_at')
+                                                            ->pluck('created_at')
+                                                            ->toArray();
+
+        $getAllYearsWithNewClientColab = ClientColaboratorRequester::whereNull('first_purchase_year')
+                                                                    ->distinct()
+                                                                    ->where('status', 'lead')
+                                                                    ->orderBy('created_at', 'desc')
+                                                                    ->get('created_at')
+                                                                    ->pluck('created_at')
+                                                                    ->toArray();
+
+        dd($getAllYearsWithNewClientColab);
+
+        $datesMerged = array_unique(array_merge($getAllYearsWithNewClientCompanies, $getAllYearsWithNewClientColab));
+        rsort($datesMerged);
+
+        foreach($datesMerged as $date){
+
+            $newClientCompanies = ClientCompany::where('first_purchase_year', $date)->get()->count();
+            $newSingularClients = ClientColaboratorRequester::where('first_purchase_year', $date)->get()->count();
+            
+            $newClients[$date] = $newSingularClients + $newClientCompanies;
+
+        }
+
+        return $newClients;
     }
 
     /**

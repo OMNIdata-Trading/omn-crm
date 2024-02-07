@@ -1,16 +1,8 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+use Illuminate\Support\Facades\Route;
+use Modules\Goals\Http\Controllers\GoalsController;
 
-Route::prefix('goals')->group(function() {
-    Route::get('/', 'GoalsController@index');
+Route::group(['prefix' => 'account/overview', 'middleware' => 'auth'], function(){
+    Route::resource('/goals', GoalsController::class)->names('account.overview.goals');
 });
