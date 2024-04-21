@@ -22,7 +22,7 @@ Dashboard
                 <div class="col-auto ms-auto d-print-none">
                 <div class="btn-list">
                     <span class="d-none d-sm-inline">
-                    <a href="{{ route('account.leads.create') }}" class="btn">
+                    <a href="{{ route('account.leads.businesses.create') }}" class="btn">
                         Novo Lead
                     </a>
                     </span>

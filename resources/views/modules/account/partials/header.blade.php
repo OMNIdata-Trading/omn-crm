@@ -115,7 +115,7 @@
                 </span>
               </a>
             </li>
-            <li class="nav-item {{ activeIfUrlIs('leads', 'active', 3) }}">
+            {{-- <li class="nav-item {{ activeIfUrlIs('leads', 'active', 3) }}">
               <a class="nav-link" href="{{ route('account.leads.index') }}" >
                 <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
                   <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-users-group" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -132,6 +132,41 @@
                   Leads & Clientes
                 </span>
               </a>
+            </li> --}}
+            <li class="nav-item dropdown {{ activeIfUrlIs('leads') }}">
+              <a class="nav-link dropdown-toggle" href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false" >
+                <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
+                  <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-users-group" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                    <path d="M10 13a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"></path>
+                    <path d="M8 21v-1a2 2 0 0 1 2 -2h4a2 2 0 0 1 2 2v1"></path>
+                    <path d="M15 5a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"></path>
+                    <path d="M17 10h2a2 2 0 0 1 2 2v1"></path>
+                    <path d="M5 5a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"></path>
+                    <path d="M3 13v-1a2 2 0 0 1 2 -2h2"></path>
+                  </svg>
+                </span>
+                <span class="nav-link-title">
+                  Leads & Clientes
+                </span>
+              </a>
+              <div class="dropdown-menu">
+                <div class="dropdown-menu-columns">
+                  <div class="dropdown-menu-column">
+                    <a
+                    class="dropdown-item {{ activeIfUrlIs('businesses', 'active', 3) }}"
+                    href="{{ route('account.leads.businesses.index') }}"
+                    >
+                      Empresariais
+                      {{-- <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span> --}}
+                    </a>
+                    <a class="dropdown-item {{ activeIfUrlIs('individuals', 'active', 3) }}"
+                    href="{{ route('account.leads.individuals.index') }}" >
+                      Particulares
+                    </a>
+                  </div>
+                </div>
+              </div>
             </li>
             <li class="nav-item dropdown {{ activeIfUrlIs('business') }}">
               <a class="nav-link dropdown-toggle" href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false" >

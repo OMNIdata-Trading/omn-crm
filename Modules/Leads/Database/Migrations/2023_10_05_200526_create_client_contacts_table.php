@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('client_contacts', function (Blueprint $table) {
+        Schema::create('client_company_contacts', function (Blueprint $table) {
             $table->id();
             $table->string('contact');
             $table->foreignId('id_client_company')

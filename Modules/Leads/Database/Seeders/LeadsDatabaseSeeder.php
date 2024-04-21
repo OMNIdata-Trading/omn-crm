@@ -18,6 +18,7 @@ class LeadsDatabaseSeeder extends Seeder
         $this->call([
             ClientCompanySeederTableSeeder::class,
             ClientColaboratorSeederTableSeeder::class,
+            IndividualClientSeederTableSeeder::class
         ]);
     }
 }

@@ -32,26 +32,6 @@ class ClientColaboratorSeederTableSeeder extends Seeder
                 'id_client_company' => 2
             ],
             [
-                'fullname' => 'Isaquias Marques',
-                'email' => 'patisaquias2000@gmail.com',
-                'id_client_company' => null,
-                'first_purchase_year' => 2022,
-                'status' => 2,
-            ],
-            [
-                'fullname' => 'Alexandre da Silva',
-                'email' => 'alexandre.dasilva20@test-gmail.com',
-                'id_client_company' => null,
-                'first_purchase_year' => date('Y'),
-                'status' => 2,
-            ],
-            [
-                'fullname' => 'Alexandre António',
-                'email' => 'alexandre.antonio@test-gmail.com',
-                'id_client_company' => null,
-                'status' => 1,
-            ],
-            [
                 'fullname' => 'Carlos Ribeiro',
                 'email' => 'carlos.ribeiro@sonangol.ao',
                 'id_client_company' => 3

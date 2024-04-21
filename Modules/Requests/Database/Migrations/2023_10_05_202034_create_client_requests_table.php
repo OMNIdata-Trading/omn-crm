@@ -24,6 +24,10 @@ return new class extends Migration
                   ->nullable()
                   ->constrained('request_income_methods')
                   ->nullOnDelete();
+            $table->foreignId('id_individual_client')
+                  ->nullable()
+                  ->constrained('individual_clients')
+                  ->nullOnDelete();
             $table->date('requested_at')->nullable();
             $table->timestamps();
         });

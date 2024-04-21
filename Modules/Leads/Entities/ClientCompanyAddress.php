@@ -5,12 +5,12 @@ namespace Modules\Leads\Entities;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ClientContact extends Model
+class ClientCompanyAddress extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'contact',
+        'address',
         'id_client_company'
     ];
 

@@ -27,12 +27,12 @@ class ClientCompany extends Model
 
     public function addresses()
     {
-        return $this->hasMany(ClientAddress::class, 'id_client_company', 'id');
+        return $this->hasMany(ClientCompanyAddress::class, 'id_client_company', 'id');
     }
 
     public function contacts()
     {
-        return $this->hasMany(ClientContact::class, 'id_client_company', 'id');
+        return $this->hasMany(ClientCompanyContact::class, 'id_client_company', 'id');
     }
 
 }

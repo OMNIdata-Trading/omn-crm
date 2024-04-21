@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Modules\Invoices\Entities\Invoice;
 use Modules\Leads\Entities\ClientColaboratorRequester;
 use Modules\Leads\Entities\ClientCompany;
+use Modules\Leads\Entities\IndividualClient;
 use Modules\Proposals\Entities\Proposal;
 use Modules\Requests\Entities\ClientRequests;
 use Modules\Requests\Entities\RequestIncomeMethod;
@@ -165,21 +166,21 @@ class DashboardController extends Controller
                                                                         ->pluck('first_purchase_year')
                                                                         ->toArray();
 
-        $getAllYearsWithNewClientColab = ClientColaboratorRequester::whereNotNull('first_purchase_year')->distinct()
+        $getAllYearsWithNewClientColab = IndividualClient::whereNotNull('first_purchase_year')->distinct()
                                                                         ->orderBy('first_purchase_year', 'desc')
                                                                         ->get('first_purchase_year')
                                                                         ->pluck('first_purchase_year')
                                                                         ->toArray();
 
-        $datesMerged = array_unique(array_merge($getAllYearsWithNewClientCompanies, $getAllYearsWithNewClientColab));
-        rsort($datesMerged);
+        $yearsMerged = array_unique(array_merge($getAllYearsWithNewClientCompanies, $getAllYearsWithNewClientColab));
+        rsort($yearsMerged);
 
-        foreach($datesMerged as $date){
+        foreach($yearsMerged as $year){
 
-            $newClientCompanies = ClientCompany::where('first_purchase_year', $date)->get()->count();
-            $newSingularClients = ClientColaboratorRequester::where('first_purchase_year', $date)->get()->count();
+            $newClientCompanies = ClientCompany::where('first_purchase_year', $year)->get()->count();
+            $newSingularClients = IndividualClient::where('first_purchase_year', $year)->get()->count();
             
-            $newClients[$date] = $newSingularClients + $newClientCompanies;
+            $newClients[$year] = $newSingularClients + $newClientCompanies;
 
         }
 
