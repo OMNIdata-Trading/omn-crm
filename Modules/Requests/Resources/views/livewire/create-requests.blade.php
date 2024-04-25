@@ -128,7 +128,14 @@
             <div class="col-md-12">
               <div class="mb-2">
                 <label class="form-label">Descrição</label>
-                <textarea rows="5" wire:model='description' maxlength="500" wire:keyup='validateDescription' maxlength="" class="form-control" placeholder="Descrição da solicitação"></textarea>
+                <textarea
+                rows="5"
+                wire:model='description'
+                maxlength="500"
+                wire:input='validateDescription'
+                maxlength=""
+                class="form-control @error('description') is-invalid @enderror"
+                placeholder="Descrição da solicitação"></textarea>
                 <small class="form-hint">{{ strlen($description) }}/500 caractéres</small>
               </div>
               @error('description')
@@ -139,93 +146,99 @@
             {{-- Media --}}
             <div class="col-md-12">
               <h3 class="card-title">Anexos</h3>
-                  
-                  <div class="row row-cards">
-                    @if (count($attachmentsDescriptions) > 0)
-                      @foreach ($attachmentsDescriptions as $key => $attachment)
-                      <div class="col-4">
-                        <div class="card">
-                          <div class="card-body">
-                            <div class="mb-0">
-                              <div class="mb-3">
-                                <div class="form-label required">Nome do arquivo</div>
-                                <input type="text" wire:model='attachmentsDescriptions.{{$key}}.file_name' class="form-control">
-                              </div>
-                              {{-- <div class="mb-3">
-                                <div class="form-label">Tipo do arquivo</div>
-                                <select
-                                type="text"
-                                class="form-select"
-                                wire:model='attachmentsDescriptions.{{$key}}.file_type'
-                                >
-                                    <option value="docs" selected>Documento</option>
-                                    <option value="excel">Excel</option>
-                                    <option value="pdf">PDF</option>
-                                    <option value="text">Email</option>
-                                    <option value="text">Texto</option>
-                                    <option value="image">Imagem</option>
-                                </select>
-                              </div> --}}
-                              <div class="mb-2">
-                                <input type="file" wire:model='attachments' class="form-control" />
-                              </div>
-                              @error('attachments.*') <span class="text-xs text-danger">{{ $message }}</span> @enderror
-                            </div>
+
+              <div class="row row-cards">
+                @if (count($attachmentsDescriptions) > 0)
+                  @foreach ($attachmentsDescriptions as $key => $attachment)
+                  <div class="col-4">
+                    <div class="card">
+                      <div class="card-body">
+                        <div class="mb-0">
+                          <div class="mb-3">
+                            <div class="form-label required">Nome do arquivo</div>
+                            <input type="text" wire:model='attachmentsDescriptions.{{$key}}.file_name' class="form-control">
                           </div>
-                          <div class="card-footer">
-                            <a class="text-danger" href="javascript:void(0)"
-                            wire:click='removeAttachment({{$key}})'
-                            >Remover anexo</a>
+                          {{-- <div class="mb-3">
+                            <div class="form-label">Tipo do arquivo</div>
+                            <select
+                            type="text"
+                            class="form-select"
+                            wire:model='attachmentsDescriptions.{{$key}}.file_type'
+                            >
+                                <option value="docs" selected>Documento</option>
+                                <option value="excel">Excel</option>
+                                <option value="pdf">PDF</option>
+                                <option value="text">Email</option>
+                                <option value="text">Texto</option>
+                                <option value="image">Imagem</option>
+                            </select>
+                          </div> --}}
+                          <div class="mb-2">
+                            <input type="file" wire:model='attachments' class="form-control" />
                           </div>
+                          @error('attachments.*') <span class="text-xs text-danger">{{ $message }}</span> @enderror
                         </div>
                       </div>
-                      @endforeach
-                    @else
-                        
-                    @endif
-
-                    <div class="col-1">
-                      <div class="row g-2 align-items-center">
-                        <div class="col-6 col-sm-4 col-md-2 col-xl-auto py-0">
-                          <a href="javascript:void(0)" class="btn btn-plus w-100 btn-icon" aria-label="Plus"
-                          wire:click='addAttachment'
-                          >
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                              <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                              <path d="M12 5l0 14" />
-                              <path d="M5 12l14 0" />
-                            </svg>
-                          </a>
-                        </div>
+                      <div class="card-footer">
+                        <a class="text-danger" href="javascript:void(0)"
+                        wire:click='removeAttachment({{$key}})'
+                        >Remover anexo</a>
                       </div>
                     </div>
                   </div>
+                  @endforeach
+                @else
+                    
+                @endif
+
+                <div class="col-1">
+                  <div class="row g-2 align-items-center">
+                    <div class="col-6 col-sm-4 col-md-2 col-xl-auto py-0">
+                      <a href="javascript:void(0)" class="btn btn-plus w-100 btn-icon" aria-label="Plus"
+                      wire:click='addAttachment'
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                          <path d="M12 5l0 14" />
+                          <path d="M5 12l14 0" />
+                        </svg>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
             </div>
 
             {{-- Colaborators --}}
-            <label class="form-label">Colaboradores para dar tratamento</label>
-            @foreach ($allColaborators as $colaborator)
-            <div class="col-md-3">
-              <label class="form-selectgroup-item flex-fill">
-                <input type="checkbox" name="colaborators[]" value="1" class="form-selectgroup-input" >
-                <div class="form-selectgroup-label d-flex align-items-center p-3"
-                wire:click='addSelectedColaborator({{ $colaborator }})'
-                >
-                  <div class="me-3">
-                    <span class="form-selectgroup-check"></span>
-                  </div>
-                  <div class="form-selectgroup-label-content d-flex align-items-center">
-                    <span class="avatar me-3">{{ getTheInitialLetters($colaborator->fullname) }}</span>
-                    <div>
-                      <div class="font-weight-medium" @style('text-align: left')>{{ $colaborator->fullname }}</div>
-                      <div class="text-muted" @style('text-align: left')>{{ $colaborator->role->name }}</div>
+            <div class="col-md-12">
+              <h3 class="card-title">Colaboradores para dar tratamento</h3>
+
+              <div class="row row-cards">
+                @foreach ($allColaborators as $colaborator)
+                <div class="col-md-3">
+                  <label class="form-selectgroup-item flex-fill">
+                    <input type="checkbox" name="colaborators[]" value="1" class="form-selectgroup-input" >
+                    <div class="form-selectgroup-label d-flex align-items-center p-3"
+                    wire:click='addSelectedColaborator({{ $colaborator }})'
+                    >
+                      <div class="me-3">
+                        <span class="form-selectgroup-check"></span>
+                      </div>
+                      <div class="form-selectgroup-label-content d-flex align-items-center">
+                        <span class="avatar me-3">{{ getTheInitialLetters($colaborator->fullname) }}</span>
+                        <div>
+                          <div class="font-weight-medium" @style('text-align: left')>{{ $colaborator->fullname }}</div>
+                          <div class="text-muted" @style('text-align: left')>{{ $colaborator->role->name }}</div>
+                        </div>
+                      </div>
                     </div>
-                  </div>
+                  </label>
                 </div>
-              </label>
+                @endforeach
+              </div>
+
             </div>
-            @endforeach
 
             {{-- @php
                 echo count($selectedColaborators);
@@ -295,45 +308,9 @@
     </form>
 </div>
 
-{{-- @section('scripts') --}}
-<script type="text/javascript">
-
-  // $(document).ready(function (){
-  //   $('#select-company-requester').change(function(event){
-      
-  //     var clientPersonSelect = $('#select-client-company-colaborators').html('');
-      
-  //     $.ajax({
-  //       url: "{{ url('fetching/dropdowns/client-companies/colaborators') }}",
-  //       type: 'POST',
-  //       dataType: 'json',
-  //       data: {
-  //         id: this.value,
-  //         _token: "{{ csrf_token() }}"
-  //       },
-  //       success: function(response){
-  //         // console.log(response);
-  //         console.log(clientPersonSelect[0].tomselect)
-  //         // console.log(this)
-  //         clientPersonSelect.html('<option value="no-records" disabled>-- du --</option>');
-  //       }
-  //     })
-  //   });
-  // });
-
-  // document.addEventListener('livewire:initialized', () => {
-  //   @this.on('companySelectHasChanged', (event) => {
-  //     // alert("mudou!");
-  //   })
-  // });
-</script>
-{{-- @endsection --}}
-
-
 {{-- Select input das empresas-cliente --}}
 <script>
   // @formatter:off
-
   let handler = {
       copyClassesToDropdown: false,
       dropdownParent: 'body',
@@ -356,18 +333,4 @@
         },
       },
   };
-
-  
-  document.addEventListener("DOMContentLoaded", function () {
-    
-    // var select = new TomSelect(document.getElementById('select-company-requester'), handler);
-  });
-
-  // document.addEventListener('livewire:initialized', () => {
-  //   @this.on('companySelectHasChanged', (event) => {
-  //     // alert("mudou!");      
-  //     var select = new TomSelect(document.getElementById('select-company-requester'), handler);
-  //   })
-  // });
-  // @formatter:on
 </script>

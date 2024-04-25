@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
             ColaboratorsDatabaseSeeder::class,
             UsersDatabaseSeeder::class,
             RequestsDatabaseSeeder::class,
-            LeadsDatabaseSeeder::class,
+            // LeadsDatabaseSeeder::class,
         ]);
     }
 }

@@ -28,6 +28,8 @@ return new class extends Migration
                   ->nullable();
             $table->year('first_purchase_year')
                   ->nullable();
+            $table->year('first_request_year')
+                  ->nullable();
             $table->enum('status', ['lead', 'client']);
             $table->timestamps();
         });

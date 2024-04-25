@@ -17,6 +17,7 @@ class IndividualClient extends Model
         'website',
         'email',
         'first_purchase_year',
+        'first_request_year',
         'status'
     ];
 

@@ -36,7 +36,7 @@ class BusinessLeadsController extends Controller
      */
     public function create()
     {
-        return view('leads::pages.create');
+        return view('leads::pages.create.business');
     }
 
     /**

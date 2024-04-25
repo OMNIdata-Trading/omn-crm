@@ -79,7 +79,7 @@ Solicitações
               </div>
               <div>
                 <h4 class="alert-title">Informação!</h4>
-                <div class="text-secondary">Só serão disponibilizadas as solicitações que na qual o colaborador logado ({{ explode(' ', Auth::user()->colaborator->fullname)[0] }}) foi colocado como responsável.</div>
+                <div class="text-secondary">Só serão disponibilizadas as solicitações que na qual o utilizador ({{ explode(' ', Auth::user()->colaborator->fullname)[0] }}) foi seleccionado como parte dos responsáveis.</div>
               </div>
             </div>
         </div>

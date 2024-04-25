@@ -61,22 +61,17 @@ class LeadTemplateController
     private function getNewLeadsData()
     {
         $newLeads = [];
-        $newLeadCompanies = [];
-        $newIndividualClients = [];
-
-        $getAllYearsWithNewLeadCompanies = ClientCompany::where('status', 'lead')
-                                                            ->distinct()
-                                                            ->select(DB::raw('YEAR(created_at) as year'))
-                                                            ->orderBy('year', 'desc')
-                                                            ->get('year')
-                                                            ->pluck('year')
-                                                            ->toArray();
+        $getAllYearsWithNewLeadCompanies = ClientCompany::whereNotNull('first_request_year')->distinct()
+                                                        ->orderBy('first_request_year', 'desc')
+                                                        ->get('first_request_year')
+                                                        ->pluck('first_request_year')
+                                                        ->toArray();
 
         $mergedYears = array_unique(array_merge($getAllYearsWithNewLeadCompanies));
         rsort($mergedYears);
 
         foreach($mergedYears as $year){
-            $newLeadCompanies = ClientCompany::whereYear('created_at', $year)->where('status', 'lead')->get()->count();            
+            $newLeadCompanies = ClientCompany::where('first_request_year', $year)->get()->count();            
             $newLeads[$year] = $newLeadCompanies;
         }
 

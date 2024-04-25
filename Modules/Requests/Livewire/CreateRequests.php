@@ -2,6 +2,7 @@
 
 namespace Modules\Requests\Livewire;
 
+use App\Core\Interfaces\WithValidInputs;
 use DateTime;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -18,7 +19,7 @@ use Modules\Storage\Entities\RequestFiles;
 use Modules\Tasks\Entities\Task;
 
 
-class CreateRequests extends Component
+class CreateRequests extends Component implements WithValidInputs
 {
     use WithFileUploads;
 
@@ -41,7 +42,7 @@ class CreateRequests extends Component
     public $hasTasks = false;
     public $tasks;
 
-    #[Rule(['attachments.*' => 'file|mimes:pdf,txt,docx,xlsx|max:102400'])] // max 100MB
+    #[Rule(['attachments.*' => 'file|mimes:pdf,txt,docx,xlsx|max:102400'])] // max 100KB
     public $attachments;
     public $attachmentsDescriptions;
     
@@ -65,6 +66,8 @@ class CreateRequests extends Component
         'addedNewClient' => 'getClientCompanies',
         'changeDetectedOnClient' => 'changeDetectedOnClientColaboratorSelect'
     ];
+
+    public function validateInputs(): void{}
 
     public function mount(){
         $this->getClientCompanies();

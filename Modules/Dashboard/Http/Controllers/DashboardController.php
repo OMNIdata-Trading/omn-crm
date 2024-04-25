@@ -10,6 +10,7 @@ use Modules\Invoices\Entities\Invoice;
 use Modules\Leads\Entities\ClientColaboratorRequester;
 use Modules\Leads\Entities\ClientCompany;
 use Modules\Leads\Entities\IndividualClient;
+use Modules\Leads\Http\Controllers\LeadTemplateController;
 use Modules\Proposals\Entities\Proposal;
 use Modules\Requests\Entities\ClientRequests;
 use Modules\Requests\Entities\RequestIncomeMethod;
@@ -22,7 +23,11 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        $newClients = $this->getNewClientsData();
+        $leadTemplateController = new LeadTemplateController();
+        $newClients = $leadTemplateController->widgetCharts(['new-clients']);
+        $newLeads = $leadTemplateController->widgetCharts(['new-leads']);
+        $newIndividualClients = $leadTemplateController->widgetCharts(['new-individual-clients']);
+        $newIndividualLeads = $leadTemplateController->widgetCharts(['new-individual-leads']);
 
         $totalRevenueFromYears = Proposal::where('status', 'accepted')->join('proposal_details', 'proposals.id', '=', 'proposal_details.id_proposal')
                                                                         ->select('year', DB::raw('SUM(proposal_details.total_cost) as total'))
@@ -127,6 +132,9 @@ class DashboardController extends Controller
 
         return view('dashboard::pages.index', compact([
             'newClients',
+            'newLeads',
+            'newIndividualClients',
+            'newIndividualLeads',
             'totalRevenueFromYears',
             'currentYearRevenue',
             'lastYearRevenue',
@@ -152,39 +160,6 @@ class DashboardController extends Controller
             'proposalSentTodayForChart',
             'proposalSentYesterdayForChart'
         ]));
-    }
-
-    public function getNewClientsData()
-    {
-        $newClients = [];
-        $newClientCompanies = [];
-        $newSingularClients = [];
-
-        $getAllYearsWithNewClientCompanies = ClientCompany::whereNotNull('first_purchase_year')->distinct()
-                                                                        ->orderBy('first_purchase_year', 'desc')
-                                                                        ->get('first_purchase_year')
-                                                                        ->pluck('first_purchase_year')
-                                                                        ->toArray();
-
-        $getAllYearsWithNewClientColab = IndividualClient::whereNotNull('first_purchase_year')->distinct()
-                                                                        ->orderBy('first_purchase_year', 'desc')
-                                                                        ->get('first_purchase_year')
-                                                                        ->pluck('first_purchase_year')
-                                                                        ->toArray();
-
-        $yearsMerged = array_unique(array_merge($getAllYearsWithNewClientCompanies, $getAllYearsWithNewClientColab));
-        rsort($yearsMerged);
-
-        foreach($yearsMerged as $year){
-
-            $newClientCompanies = ClientCompany::where('first_purchase_year', $year)->get()->count();
-            $newSingularClients = IndividualClient::where('first_purchase_year', $year)->get()->count();
-            
-            $newClients[$year] = $newSingularClients + $newClientCompanies;
-
-        }
-
-        return $newClients;
     }
 
     public function transformToExtension($numeric_month)

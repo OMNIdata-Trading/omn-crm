@@ -34,7 +34,7 @@ class IndividualLeadsController extends Controller
      */
     public function create()
     {
-        return view('leads::pages.create');
+        return view('leads::pages.create.individual');
     }
 
     /**

@@ -8,3 +8,8 @@ function activeIfUrlIs (string $uri, $classToReturn = 'active', int $segment = 2
     }
     return $classToReturn;
 }
+
+function isCurrentUri(string $uri, int $segment = 2)
+{
+    return request()->segment($segment) == $uri;
+}

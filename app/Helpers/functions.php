@@ -1,12 +1,18 @@
 <?php
 
-function getTheInitialLetters($term, $separator = ' ')
+function getTheInitialLetters($term, $separator = ' ', $code = 'first_last_initials')
 {
     $initials = '';
     $names = explode($separator, $term);
-    foreach($names as $name){
+    foreach($names as $index => $name){
         $wordWithoutAccentuation = removeAccent($name);
-        $initials .= str_split($wordWithoutAccentuation)[0];
+        if($code === 'first_last_initials'){
+            if($index === 0 || $index === count($names) - 1){
+                $initials .= str_split($wordWithoutAccentuation)[0];
+            }
+        }else {
+            $initials .= str_split($wordWithoutAccentuation)[0];
+        }
     }
     return $initials;
 }
@@ -129,4 +135,10 @@ function dateSeparator($date, $separator = '-')
 function getThePercentage($number, $total)
 {
     return (100 * $number) / $total . "%";
+}
+
+function validateWebsite(string $website)
+{
+    $headers = @get_headers($website);
+    return $headers && strpos($headers[0], '200') ? true : false; 
 }

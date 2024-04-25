@@ -17,6 +17,7 @@ class ClientCompany extends Model
         'company_email',
         'activity_area',
         'first_purchase_year',
+        'first_request_year',
         'status'
     ];
 
@@ -33,6 +34,11 @@ class ClientCompany extends Model
     public function contacts()
     {
         return $this->hasMany(ClientCompanyContact::class, 'id_client_company', 'id');
+    }
+
+    public function whatAmI()
+    {
+        return $this->status;
     }
 
 }
