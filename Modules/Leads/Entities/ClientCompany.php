@@ -41,4 +41,9 @@ class ClientCompany extends Model
         return $this->status;
     }
 
+    public function myRepresentation()
+    {
+        return "company";
+    }
+
 }

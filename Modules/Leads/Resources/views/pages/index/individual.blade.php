@@ -200,8 +200,8 @@
             <div class="d-flex py-1 align-items-center">
               <span class="avatar me-2"> {{ getTheInitialLetters($lead->fullname) }} </span>
               <div class="flex-fill">
-                <div class="font-weight-medium">{{ $lead->fullname }}</div>
-                <div class="text-muted"><a href="#" class="text-reset">{{ $lead->website ?? 'empty' }}</a></div>
+                <div class="font-weight-medium table-long-text long-a">{{ $lead->fullname }}</div>
+                <div class="text-muted table-long-text long-a"><a href="#" class="text-reset">{{ $lead->website ?? 'empty' }}</a></div>
               </div>
             </div>
           </td>
@@ -209,7 +209,7 @@
             @if ($lead->addresses->count() > 0)
               @foreach ($lead->addresses as $key => $address)
                 @if ($key == 0)
-                <div>{{ $address->address ?? 'empty' }}</div>
+                <div class="table-long-text long-a">{{ $address->address ?? 'empty' }}</div>
                 @else
                     
                 @endif
@@ -218,7 +218,7 @@
                 <div>empty</div>
             @endif
             <div class="text-muted">
-              <a href="#" class="text-reset">{{ $lead->email ?? 'empty' }}</a>
+              <a href="#" class="text-reset table-long-text long-a">{{ $lead->email ?? 'empty' }}</a>
             </div>
           </td>
           <td data-label="Contacts" >

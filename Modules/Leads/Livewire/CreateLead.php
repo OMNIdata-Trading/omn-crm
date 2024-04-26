@@ -41,7 +41,7 @@ class CreateLead extends Component implements WithValidInputs, WithValidFileInpu
             'phone_number2' => '',
             'phone_number3' => '',
             'id_client_company' => 0
-        ];;
+        ];
     }
 
     public function store()
@@ -55,6 +55,9 @@ class CreateLead extends Component implements WithValidInputs, WithValidFileInpu
 
         if($this->firstPurchaseYear == ""){
             $this->firstPurchaseYear = null;
+        }
+        if($this->firstRequestYear == ""){
+            $this->firstRequestYear = null;
         }
 
         $sluggedName = Str::slug($this->name);
@@ -144,6 +147,7 @@ class CreateLead extends Component implements WithValidInputs, WithValidFileInpu
             'nif' => 'nullable|unique:client_companies,nif',
             'email' => 'required|unique:client_companies,company_email',
             'firstPurchaseYear' => 'nullable',
+            'firstRequestYear' => 'nullable',
             'contactsArray.*' => 'required',
             'addressesArray.*' => 'required',
             'companyColaboratorsArray.*.fullname' => 'required',

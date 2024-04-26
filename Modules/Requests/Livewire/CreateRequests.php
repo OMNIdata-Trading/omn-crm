@@ -59,8 +59,6 @@ class CreateRequests extends Component implements WithValidInputs
 
     public $count = 0;
 
-    // public $errors = [];
-
     // events
     protected $listeners = [
         'addedNewClient' => 'getClientCompanies',

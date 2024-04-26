@@ -105,19 +105,17 @@ class LeadTemplateController
     {
         $leadsArray = [];
 
-        $getAllYearsWithNewIndividualLeads = IndividualClient::where('status', 'lead')
-                                                            ->distinct()
-                                                            ->select(DB::raw('YEAR(created_at) as year'))
-                                                            ->orderBy('year', 'desc')
-                                                            ->get('year')
-                                                            ->pluck('year')
+        $getAllYearsWithNewIndividualLeads = IndividualClient::whereNotNull('first_request_year')->distinct()
+                                                            ->orderBy('first_request_year', 'desc')
+                                                            ->get('first_request_year')
+                                                            ->pluck('first_request_year')
                                                             ->toArray();
 
         $mergedYears = array_unique(array_merge($getAllYearsWithNewIndividualLeads));
         rsort($mergedYears);
 
         foreach($mergedYears as $year){
-            $newIndividualLeads = IndividualClient::whereYear('created_at', $year)->where('status', 'lead')->get()->count();
+            $newIndividualLeads = IndividualClient::where('first_request_year', $year)->get()->count();
             $leadsArray[$year] = $newIndividualLeads;
         }
 

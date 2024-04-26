@@ -137,12 +137,16 @@ Dashboard
           ])
         </div>
         <div class="col-sm-6 col-lg-3">
-          @livewire('apex-chart-bar', [
+          @livewire('apex-chart-multi', [
             'label' => 'Faturas',
-            'chartColor' => 'pink',
-            'chartBarLabel' => 'Elaboradas',
             'chartId' => 'invoices',
-            'chartData' => $newClients
+            'chartSeries' => [
+              [
+                'name' => 'Elaboradas',
+                'color' => 'pink',
+                'data' => $newLeads['new-leads']
+              ]
+            ]
           ])
         </div>
         <div class="col-sm-6 col-lg-3">
@@ -153,12 +157,12 @@ Dashboard
               [
                 'name' => 'Leads',
                 'color' => 'orange',
-                'data' => $newClients['new-clients']
+                'data' => $newLeads['new-leads']
               ],
               [
                 'name' => 'Clientes',
                 'color' => 'success',
-                'data' => $newLeads['new-leads']
+                'data' => $newClients['new-clients']
               ],
             ]
           ])
@@ -166,17 +170,17 @@ Dashboard
         <div class="col-sm-6 col-lg-3">
           @livewire('apex-chart-multi', [
             'label' => 'Novos Clientes (Particulares)',
-            'chartId' => 'new-leads-and-clients',
+            'chartId' => 'new-individual-leads-and-clients',
             'chartSeries' => [
               [
                 'name' => 'Leads',
                 'color' => 'orange',
-                'data' => $newIndividualClients['new-individual-clients']
+                'data' => $newIndividualLeads['new-individual-leads']
               ],
               [
                 'name' => 'Clientes',
                 'color' => 'success',
-                'data' => $newIndividualLeads['new-individual-leads']
+                'data' => $newIndividualClients['new-individual-clients']
               ],
             ]
           ])

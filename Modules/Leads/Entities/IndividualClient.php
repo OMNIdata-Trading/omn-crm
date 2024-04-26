@@ -34,5 +34,15 @@ class IndividualClient extends Model
     {
         return $this->hasMany(IndividualClientContact::class, 'id_individual_client', 'id');
     }
+
+    public function whatAmI()
+    {
+        return $this->status;
+    }
+
+    public function myRepresentation()
+    {
+        return "individual";
+    }
     
 }
