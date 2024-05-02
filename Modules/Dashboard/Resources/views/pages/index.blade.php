@@ -20,18 +20,26 @@ Dashboard
                 </div>
                 <!-- Page title actions -->
                 <div class="col-auto ms-auto d-print-none">
-                <div class="btn-list">
-                    <span class="d-none d-sm-inline">
-                    <a href="{{ route('account.leads.businesses.create') }}" class="btn">
-                        Novo Lead
-                    </a>
-                    </span>
-                    <a href="{{ route('account.business.requests.create') }}" class="btn btn-primary d-none d-sm-inline-block">
-                      <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
-                      <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
-                      Gerar novo negócio
-                    </a>
-                </div>
+                  <div class="btn-list">
+                      <div class="dropdown">
+                        <button class="btn dropdown-toggle align-text-top" data-bs-toggle="dropdown">
+                          Novo Lead/Cliente
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-end">
+                          <a class="dropdown-item" href="{{ route('account.leads.businesses.create') }}">
+                            Empresarial
+                          </a>
+                          <a class="dropdown-item" href="{{ route('account.leads.individuals.create') }}">
+                            Particular
+                          </a>
+                        </div>
+                      </div>
+                      <a href="{{ route('account.business.requests.create') }}" class="btn btn-primary d-none d-sm-inline-block">
+                        <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
+                        Gerar novo negócio
+                      </a>
+                  </div>
                 </div>
             </div>
         </div>
@@ -490,7 +498,7 @@ Dashboard
                 <td class="td-truncate">
                   <div class="text-truncate">
                     @php
-                        $companyOwner = $proposal->request->clients[0]->company->name ?? $proposal->request->clients[0]->fullname;
+                        $companyOwner = $proposal->request->clients[0]->company->name ?? $proposal->request->individualClient->fullname;
                     @endphp
                     Proposta Nº {{ $proposal->order_number }}/{{ $proposal->year }} foi enviada para o cliente <strong>{{ $companyOwner }}</strong>
                   </div>

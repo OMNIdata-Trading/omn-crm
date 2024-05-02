@@ -226,13 +226,13 @@
                                 <div class="mb-3">
                                     <div class="form-label required">Contacto</div>
                                     <input
-                                    class="form-control @error('contactsArray.' . $key) is-invalid @enderror"
-                                    wire:model='contactsArray.{{ $key }}'
+                                    class="form-control @error('contactsArray.' . $key . 'contact') is-invalid @enderror"
+                                    wire:model='contactsArray.{{ $key }}.contact'
                                     type="text"
                                     placeholder="Ex: +244 000 000 000"
                                     id="">
                                 </div>
-                                @error('contactsArray.' . $key)
+                                @error('contactsArray.' . $key . 'contact')
                                 <span class="text-small text-muted text-red">{{ $message }}</span> <br><br>
                                 @enderror
                                 <a class="text-danger" wire:click='removeContact({{ $key }})' href="javascript:void(0)"
@@ -269,10 +269,10 @@
                             <fieldset class="form-fieldset">
                                 <div class="mb-3">
                                     <div class="form-label required">Endereço</div>
-                                    <input class="form-control @error('addressesArray.' . $key) is-invalid @enderror" wire:model='addressesArray.{{ $key }}' type="text" name="" placeholder="" id="">
+                                    <input class="form-control @error('addressesArray.' . $key . 'address') is-invalid @enderror" wire:model='addressesArray.{{ $key }}.address' type="text" name="" placeholder="" id="">
                                 </div>
                                 
-                                @error('addressesArray.' . $key)
+                                @error('addressesArray.' . $key . 'address')
                                 <span class="text-small text-muted text-red">{{ $message }}</span> <br><br>
                                 @enderror
                                 <a class="text-danger" wire:click='removeAddress({{ $key }})' href="javascript:void(0)"

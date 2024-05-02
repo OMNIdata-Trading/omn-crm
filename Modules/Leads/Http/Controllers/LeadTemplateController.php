@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Support\Facades\DB;
 use Modules\Leads\Entities\ClientCompany;
 use Modules\Leads\Entities\IndividualClient;
+use Modules\Requests\Entities\ClientRequests;
 
 use function Laravel\Prompts\select;
 
@@ -142,5 +143,115 @@ class LeadTemplateController
         return (IndividualClient::whereYear('created_at', date('Y'))->where('status', 'lead')->get()->count());
     }
 
+    public function getLeadRequestsPerYear(ClientCompany $client)
+    {
+        return [ 'countAllRequests' => $this->getClientRequestsTotal($client), 'data' => $this->getYearsWithRequestsFromClient($client)];
+    }
+
+    private function getYearsWithRequestsFromClient(ClientCompany $client)
+    {
+        return $client->colaborators->flatMap(function ($colaborator){
+            return $colaborator->requests()->select(DB::raw('YEAR(requested_at) as year'))->get('year')->pluck('year');
+        })->countBy(function ($year){
+            return strval($year);
+        })->toArray();
+    }
+
+    private function getClientRequestsTotal(ClientCompany $client)
+    {
+        $count = $client->colaborators->sum(function ($colaborator){
+            return $colaborator->requests->count();
+        });
+        return $count;
+    }
+
+    public function getIndividualLeadRequestsPerYear(IndividualClient $client)
+    {
+        return [ 'countAllRequests' => $this->getIndividualClientRequestsTotal($client), 'data' => $this->getYearsWithRequestsFromIndividualClient($client) ];
+    }
+
+    private function getYearsWithRequestsFromIndividualClient(IndividualClient $client)
+    {
+        return $client->requests()->get()->map(function ($request) {
+            return date('Y', strtotime($request->requested_at));
+        })->countBy(function ($year) {
+            return $year;
+        })->toArray();
+    }
+
+    private function getIndividualClientRequestsTotal(IndividualClient $client)
+    {
+        return $client->requests->count();
+    }
+
+    public function getLeadProposalsPerYearWithFilter(ClientCompany $client)
+    {
+        return [
+            'countAllProposals' => $this->getTotalLeadProposals($client),
+            'data' => [
+                'accepted' => $this-> getYearsWithProposalsFromClient($client, 'accepted'),
+                'opened' => $this-> getYearsWithProposalsFromClient($client, 'opened'),
+                'negotiation' => $this-> getYearsWithProposalsFromClient($client, 'negotiation'),
+                'lost' => $this-> getYearsWithProposalsFromClient($client, 'lost'),
+            ]
+        ];
+    }
+
+    private function getYearsWithProposalsFromClient(ClientCompany $client, $filter)
+    {
+        return $client->colaborators->flatMap(function ($colaborator) use ($filter){
+            return $colaborator->requests->flatMap(function ($request) use ($filter){
+                return $request->proposals->filter(function ($proposal) use ($filter){
+                    return $proposal->status === $filter;
+                })->map(function ($proposal){
+                    return $proposal->year;
+                });
+            });
+        })->countBy(function ($year){
+            return $year;
+        })->toArray();
+    }
+
+    private function getTotalLeadProposals(ClientCompany $client)
+    {
+        return $client->colaborators->sum(function ($colaborator){
+            return $colaborator->requests->sum(function ($request){
+                return $request->proposals->count();
+            });
+        });
+    }
+
+    public function getIndividualLeadProposalsPerYearWithFilter(IndividualClient $client)
+    {
+        return [
+            'countAllProposals' => $this->getTotalIndividualLeadProposals($client),
+            'data' => [
+                'accepted' => $this-> getYearsWithProposalsFromIndividualClient($client, 'accepted'),
+                'opened' => $this-> getYearsWithProposalsFromIndividualClient($client, 'opened'),
+                'negotiation' => $this-> getYearsWithProposalsFromIndividualClient($client, 'negotiation'),
+                'lost' => $this-> getYearsWithProposalsFromIndividualClient($client, 'lost'),
+            ]
+        ];
+    }
+
+    private function getYearsWithProposalsFromIndividualClient(IndividualClient $client, $filter)
+    {
+        return $client->requests->flatMap(function ($request) use ($filter){
+            return $request->proposals->filter(function ($proposalToFilter) use ($filter){
+                return $proposalToFilter->status === $filter;
+            })->map(function ($proposal){
+                return $proposal->year;
+            });
+        })->countBy(function ($year){
+            return $year;
+        })->toArray();
+    }
+
+    private function getTotalIndividualLeadProposals(IndividualClient $client)
+    {
+        return $client->requests->sum(function ($request){
+            return $request->proposals->count();
+        });
+    }
 
 }

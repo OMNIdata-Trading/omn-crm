@@ -99,24 +99,6 @@
         'chartData' => $widgetCharts['new-clients']
       ])
     </div>
-    {{-- <div class="col-sm-6 col-lg-3">
-      @livewire('apex-chart-bar', [
-        'label' => 'Novos Leads (Particulares)',
-        'chartColor' => 'orange',
-        'chartBarLabel' => 'Angariados',
-        'chartId' => 'new-individual-leads',
-        'chartData' => $widgetCharts['new-individual-leads']
-      ])
-    </div> --}}
-    {{-- <div class="col-sm-6 col-lg-3">
-      @livewire('apex-chart-bar', [
-        'label' => 'Novos Clientes (Particulares)',
-        'chartColor' => 'success',
-        'chartBarLabel' => 'Angariados',
-        'chartId' => 'new-individual-clients',
-        'chartData' => $widgetCharts['new-individual-clients']
-      ])
-    </div> --}}
   </div>
 </div>
 
@@ -259,16 +241,16 @@
 
                     if($lead->colaborators->count() > 0){
                         foreach($lead->colaborators as $colaborator){
-                            $totalOfRequestsFromCompany += $colaborator->requests->count();
+                            $totalOfRequestsFromCompany += $colaborator->requests()->whereYear('requested_at', date('Y'))->count();
                         }
                     }
                 @endphp
-                <div class="text-muted">No. de solicitações: {{ $totalOfRequestsFromCompany }}</div>
+                <div class="text-muted table-long-text long-a">Solicitações esse ano: {{ $totalOfRequestsFromCompany }}</div>
             </div>
           </td>
           <td>
             <div class="btn-list flex-nowrap">
-              <a href="#" class="btn btn-primary">
+              <a href="{{ route('account.leads.businesses.show', [ 'business' => $lead->id ]) }}" class="btn btn-primary">
                 Visão geral
               </a>
               <div class="dropdown">
@@ -276,12 +258,14 @@
                   Ações
                 </button>
                 <div class="dropdown-menu dropdown-menu-end">
-                  <a class="dropdown-item" href="#">
+                  <a class="dropdown-item" href="{{ route('account.leads.businesses.edit', ['business' => $lead->id]) }}">
                     Editar
                   </a>
-                  <a class="dropdown-item" href="#">
-                    Eliminar
-                  </a>
+                  <form method="POST" action="{{ route('account.leads.businesses.destroy', ['business' => $lead->id]) }}">
+                      @csrf
+                      @method('DELETE')
+                      <button class="dropdown-item" onclick="return confirm('Deseja realmente eliminar o cliente {{ $lead->name }}?')" type="submit">Eliminar</button>
+                  </form>
                 </div>
               </div>
             </div>

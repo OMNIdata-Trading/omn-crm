@@ -12,7 +12,7 @@ Criar Lead Particular
                 <div class="col">
                 <!-- Page pre-title -->
                 <div class="page-pretitle">
-                    Criar registro
+                    Editar registro
                 </div>
                 <h2 class="page-title">
                     Leads & Clientes (Particulares)
@@ -30,7 +30,7 @@ Criar Lead Particular
     <div class="row row-cards">
       <div class="col-12">
 
-        @livewire('leads::create-individual-lead')
+        @livewire('leads::edit-individual-lead', [ 'id' => $clientId ])
 
       </div>
     </div>

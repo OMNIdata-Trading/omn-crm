@@ -48,8 +48,6 @@ class CreateLead extends Component implements WithValidInputs, WithValidFileInpu
     {
         $this->validateInputs();
 
-        $day = date('d');
-        $month = date('M');
         $year = date('Y');
         $logo_path = null;
 
@@ -62,7 +60,7 @@ class CreateLead extends Component implements WithValidInputs, WithValidFileInpu
 
         $sluggedName = Str::slug($this->name);
         if($this->logo){
-            $logo_path = $this->logo->store("clients/$sluggedName/logo/$year/$month/$day", 'public');
+            $logo_path = $this->logo->store("clients/$sluggedName/logo/$year", 'public');
         }
 
         $newClient = ClientCompany::create([
@@ -92,12 +90,12 @@ class CreateLead extends Component implements WithValidInputs, WithValidFileInpu
 
     public function addContact()
     {
-        $this->contactsArray[] = '';
+        $this->contactsArray['contact'] = '';
     }
 
     public function addAddress()
     {
-        $this->addressesArray[] = '';
+        $this->addressesArray['address'] = '';
     }
 
     public function addColaborator()
@@ -145,23 +143,25 @@ class CreateLead extends Component implements WithValidInputs, WithValidFileInpu
         $rules = [
             'name' => 'required',
             'nif' => 'nullable|unique:client_companies,nif',
-            'email' => 'required|unique:client_companies,company_email',
+            'email' => 'required|email|unique:client_companies,company_email',
             'firstPurchaseYear' => 'nullable',
             'firstRequestYear' => 'nullable',
-            'contactsArray.*' => 'required',
-            'addressesArray.*' => 'required',
+            'contactsArray.*.contact' => 'required',
+            'addressesArray.*.address' => 'required',
             'companyColaboratorsArray.*.fullname' => 'required',
-            'companyColaboratorsArray.*.email' => 'required',
+            'companyColaboratorsArray.*.email' => 'required|email',
         ];
         $messages = [
             'name.required' => FormValidationMessages::REQUIRED_FIELD->value,
             'nif.unique' => FormValidationMessages::existentField('NIF'),
             'email.required' => FormValidationMessages::REQUIRED_FIELD->value,
+            'email.email' => FormValidationMessages::INVALID_EMAIL->value,
             'email.unique' => FormValidationMessages::existentField('email'),
-            'contactsArray.*.required' => FormValidationMessages::REQUIRED_FIELD->value,
-            'addressesArray.*.required' => FormValidationMessages::REQUIRED_FIELD->value,
+            'contactsArray.*.contact.required' => FormValidationMessages::REQUIRED_FIELD->value,
+            'addressesArray.*.address.required' => FormValidationMessages::REQUIRED_FIELD->value,
             'companyColaboratorsArray.*.fullname.required' => FormValidationMessages::REQUIRED_FIELD->value,
             'companyColaboratorsArray.*.email.required' => FormValidationMessages::REQUIRED_FIELD->value,
+            'companyColaboratorsArray.*.email.email' => FormValidationMessages::INVALID_EMAIL->value,
         ];
 
         $this->validateFileInputs();
@@ -172,9 +172,9 @@ class CreateLead extends Component implements WithValidInputs, WithValidFileInpu
     {
         if(count($this->contactsArray) > 0){
             foreach($this->contactsArray as $contact){
-                $clientContact = ClientCompanyContact::create([ 'contact' => $contact, 'id_client_company' => $client->id ]);
+                $clientContact = ClientCompanyContact::create([ 'contact' => $contact['contact'], 'id_client_company' => $client->id ]);
                 if(!$clientContact){
-                    session()->flash('error', 'Não foi possível adicionar o contacto: \"'. $contact .'\". Tente novamente, caso o erro persitir contacte à área de suporte do sistema');
+                    session()->flash('error', 'Não foi possível adicionar o contacto: \"'. $contact['contact'] .'\". Tente novamente, caso o erro persitir contacte à área de suporte do sistema');
                     die;
                 }
             }
@@ -185,9 +185,9 @@ class CreateLead extends Component implements WithValidInputs, WithValidFileInpu
     {
         if(count($this->addressesArray) > 0){
             foreach($this->addressesArray as $address){
-                $clientAddress = ClientCompanyAddress::create([ 'address' => $address, 'id_client_company' => $client->id ]);
+                $clientAddress = ClientCompanyAddress::create([ 'address' => $address['address'], 'id_client_company' => $client->id ]);
                 if(!$clientAddress){
-                    session()->flash('error', 'Não foi possível adicionar o endereço: \"'. $address .'\". Tente novamente, caso o erro persitir contacte à área de suporte do sistema');
+                    session()->flash('error', 'Não foi possível adicionar o endereço: \"'. $address['address'] .'\". Tente novamente, caso o erro persitir contacte à área de suporte do sistema');
                     die;
                 }
             }

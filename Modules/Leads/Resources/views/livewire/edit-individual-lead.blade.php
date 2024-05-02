@@ -25,14 +25,24 @@
             </div>
         </div>
     @endif
-    <form class="card" enctype="multipart/form-data" wire:submit='store'>
+    <form class="card" enctype="multipart/form-data" wire:submit='update'>
         <div class="card-body">
+
+            @if($registeredLogo)
+                <div class="col-md-12 mb-5">
+                    <div class="row align-items-center">
+                        <div class="col-auto"><span class="avatar avatar-xl" style="background-image: url({{ URL::to('storage/' . $registeredLogo) }})"></span>
+                        </div>
+                        <div class="col-auto"></div>
+                    </div>
+                </div>
+            @endif
 
             <div class="col-md-12">
                 <div class="row row-cards">
                     <div class="col-sm-6 col-md-4">
                         <div class="mb-3">
-                            <label class="form-label required">Nome</label>
+                            <label class="form-label required">Nome Completo</label>
                             <input
                             type="text"
                             class="form-control @error('fullname') is-invalid @enderror"
@@ -55,7 +65,7 @@
                     <div class="col-sm-6 col-md-4">
                         {{-- <div class="mb-3">
                             <label class="form-label">Logotipo</label>
-                            <input type="file" accept=".png, .jpeg, .jpg" wire:model='logo' class="form-control @error('logo') is-invalid @enderror">
+                            <input type="file" disabled accept=".png, .jpeg, .jpg" wire:model='logo' class="form-control @error('logo') is-invalid @enderror">
                         </div>
                         @error('logo')
                             <span class="text-small text-muted text-red">{{ $message }}</span>
@@ -81,11 +91,11 @@
 
                 <div class="row row-cards">
                 
-                <div class="col-sm-12 col-md-4">
-                    <div class="mb-3">
-                        <label class="form-label">Website</label>
-                        <input type="text" class="form-control" wire:model='website' placeholder="Ex: www.example.com">
-                    </div>
+                    <div class="col-sm-12 col-md-4">
+                        <div class="mb-3">
+                            <label class="form-label">Website</label>
+                            <input type="text" class="form-control" wire:model='website' placeholder="Ex: www.example.com">
+                        </div>
                     </div>
                     <div class="col-sm-12 col-md-4">
                         <div class="mb-3">

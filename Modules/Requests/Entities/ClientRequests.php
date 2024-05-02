@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Colaborators\Entities\Colaborator;
 use Modules\Leads\Entities\ClientColaboratorRequester;
+use Modules\Leads\Entities\IndividualClient;
 use Modules\Proposals\Entities\Proposal;
 use Modules\Quotation\Entities\Quotation;
 use Modules\Storage\Entities\RequestFiles;
@@ -21,6 +22,7 @@ class ClientRequests extends Model
         'request_code',
         'requested_at',
         'id_income_method',
+        'id_individual_client',
         'treated'
     ];
 
@@ -32,6 +34,11 @@ class ClientRequests extends Model
     public function clients()
     {
         return $this->belongsToMany(ClientColaboratorRequester::class, 'requester_and_client_requests', 'id_requests', 'id_client_requester');
+    }
+
+    public function individualClient()
+    {
+        return $this->belongsTo(IndividualClient::class, 'id_individual_client', 'id');
     }
 
     public function colaborators()

@@ -1,7 +1,7 @@
 @extends('modules.account.layout.master')
 
 @section('account.page.title')
-Criar Lead Particular
+Editar Lead Empresarial
 @endsection
 
 @section('account.page.header')
@@ -12,10 +12,10 @@ Criar Lead Particular
                 <div class="col">
                 <!-- Page pre-title -->
                 <div class="page-pretitle">
-                    Criar registro
+                    Editar registro
                 </div>
                 <h2 class="page-title">
-                    Leads & Clientes (Particulares)
+                    Leads & Clientes (Empresas)
                 </h2>
                 </div>
             </div>
@@ -30,7 +30,9 @@ Criar Lead Particular
     <div class="row row-cards">
       <div class="col-12">
 
-        @livewire('leads::create-individual-lead')
+        @livewire('leads::edit-lead', [
+          'id' => $clientId
+        ])
 
       </div>
     </div>

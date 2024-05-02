@@ -1,7 +1,7 @@
 @extends('modules.account.layout.master')
 
 @section('account.page.title')
-Criar um Lead
+Criar Lead Empresarial
 @endsection
 
 @section('account.page.header')
@@ -12,7 +12,7 @@ Criar um Lead
                 <div class="col">
                 <!-- Page pre-title -->
                 <div class="page-pretitle">
-                    Visão geral
+                    Criar registro
                 </div>
                 <h2 class="page-title">
                     Leads & Clientes (Empresas)
@@ -30,7 +30,7 @@ Criar um Lead
     <div class="row row-cards">
       <div class="col-12">
 
-        <livewire:leads::create-lead />
+        @livewire('leads::create-lead')
 
       </div>
     </div>

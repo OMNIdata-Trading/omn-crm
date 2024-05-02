@@ -11,14 +11,20 @@ use Modules\Leads\Entities\IndividualClient;
 
 class IndividualLeadsController extends Controller
 {
+    private $leadTemplate;
+
+    public function __construct()
+    {
+        $this->leadTemplate = new LeadTemplateController();
+    }
+
     /**
      * Display a listing of the resource.
      * @return Renderable
      */
     public function index()
     {
-        $leadTemplate = new LeadTemplateController();
-        $widgetCharts = $leadTemplate->widgetCharts([
+        $widgetCharts = $this->leadTemplate->widgetCharts([
             'new-individual-leads',
             'new-individual-clients',
             'new-current-year-individual-clients',
@@ -54,7 +60,11 @@ class IndividualLeadsController extends Controller
      */
     public function show($id)
     {
-        return view('leads::pages.show');
+        $client = IndividualClient::find($id);
+        $widget['requests'] = $this->leadTemplate->getIndividualLeadRequestsPerYear($client);
+        $widget['proposals'] = $this->leadTemplate->getIndividualLeadProposalsPerYearWithFilter($client);
+
+        return view('leads::pages.show.individual', [ 'client' => $client, 'widget' => $widget ]);
     }
 
     /**
@@ -64,7 +74,7 @@ class IndividualLeadsController extends Controller
      */
     public function edit($id)
     {
-        return view('leads::pages.edit');
+        return view('leads::pages.edit.individual', [ 'clientId' => $id ]);
     }
 
     /**
@@ -85,6 +95,11 @@ class IndividualLeadsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $clientToDelete = IndividualClient::find($id)->delete();
+        if(!$clientToDelete){
+            return redirect()->route('account.leads.individuals.index')->with('error', 'Não foi possível eliminar este registro.');
+        }
+
+        return redirect()->route('account.leads.individuals.index')->with('success', 'Registro eliminado com êxito.');
     }
 }

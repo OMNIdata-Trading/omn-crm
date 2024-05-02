@@ -85,8 +85,8 @@
               {{ getTheInitialLetters(Auth::user()->colaborator->fullname) }}
             </span>
             <div class="d-none d-xl-block ps-2">
-              <div>{{ Auth::user()->colaborator->fullname }}</div>
-              <div class="mt-1 small text-muted">{{ Auth::user()->colaborator->role->name }}</div>
+              <div class="table-long-text long-a">{{ Auth::user()->colaborator->fullname }}</div>
+              <div class="mt-1 small text-muted table-long-text long-a">{{ Auth::user()->colaborator->role->name }}</div>
             </div>
           </a>
           <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">

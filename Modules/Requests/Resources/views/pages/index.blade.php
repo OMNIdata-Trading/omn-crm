@@ -218,31 +218,40 @@ Solicitações
               <tr>
                 <td data-label="Client" >
                   <div class="d-flex py-1 align-items-center">
-                    @foreach ($request->clients as $key => $client)
+                    @if ($request->id_individual_client === null)
+                      @foreach ($request->clients as $key => $client)
 
-                      @if ($key == 0)
-                        @if ($client->company)
+                        @if ($key == 0)
                           @if ($client->company->logo_path)
-                          <span class="avatar me-2" style="background-image: url({{ URL::to($client->company->logo_path) }})"></span>
+                          <span class="avatar me-2" style="background-image: url({{ URL::to('storage/' . $client->company->logo_path) }})"></span>
                           @else
                           <span class="avatar me-2"> {{ getTheInitialLetters($client->company->name) }} </span>
                           @endif
+                          <div class="flex-fill">
+                            <div class="font-weight-medium">{{ $client->fullname }}</div>
+                            <div class="text-muted">{{ $client->email }}</div>
+                          </div>
                         @else
-                          <span class="avatar me-2"> {{ getTheInitialLetters($client->fullname) }} </span>
+                            {{-- Key != 0  --}}
                         @endif
-                        <div class="flex-fill">
-                          <div class="font-weight-medium">{{ $client->fullname }}</div>
-                          <div class="text-muted">{{ $client->email }}</div>
-                        </div>
+                      @endforeach
+                    @else
+                      {{-- Individual Client --}}
+                      @if ($request->individualClient->logo_path)
+                      <span class="avatar me-2" style="background-image: url({{ URL::to('storage/' . $request->individualClient->logo_path) }})"></span>
                       @else
-                          
+                      <span class="avatar me-2"> {{ getTheInitialLetters($request->individualClient->fullname) }} </span>
                       @endif
-                    @endforeach
+                      <div class="flex-fill">
+                        <div class="font-weight-medium">{{ $request->individualClient->fullname }}</div>
+                        <div class="text-muted">{{ $request->individualClient->email }}</div>
+                      </div>
+                    @endif
                   </div>
                 </td>
                 <td data-label="Order" >
                   <div class="table-long-text long-title">{{ $request->order }}</div>
-                  <div class="text-muted"><a href="#" class="text-reset">#Código: {{ $request->request_code }}</a></div>
+                  <div class="text-muted table-long-text long-title"><a href="#" class="text-reset">#Código: {{ $request->request_code }}</a></div>
                 </td>
                 <td data-label="Colab" >
                   <div>

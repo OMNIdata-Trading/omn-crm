@@ -13,14 +13,20 @@ use function Laravel\Prompts\select;
 
 class BusinessLeadsController extends Controller
 {
+    private $leadTemplate;
+
+    public function __construct()
+    {
+        $this->leadTemplate = new LeadTemplateController();
+    }
+
     /**
      * Display a listing of the resource.
      * @return Renderable
      */
     public function index()
     {
-        $leadTemplate = new LeadTemplateController();
-        $widgetCharts = $leadTemplate->widgetCharts([
+        $widgetCharts = $this->leadTemplate->widgetCharts([
             'new-clients',
             'new-leads',
             'new-current-year-clients',
@@ -56,7 +62,11 @@ class BusinessLeadsController extends Controller
      */
     public function show($id)
     {
-        return view('leads::pages.show');
+        $client = ClientCompany::find($id);
+        $widget['requests'] = $this->leadTemplate->getLeadRequestsPerYear($client);
+        $widget['proposals'] = $this->leadTemplate->getLeadProposalsPerYearWithFilter($client);
+
+        return view('leads::pages.show.business', [ 'client' => $client, 'widget' => $widget ]);
     }
 
     /**
@@ -66,7 +76,7 @@ class BusinessLeadsController extends Controller
      */
     public function edit($id)
     {
-        return view('leads::pages.edit');
+        return view('leads::pages.edit.business', [ 'clientId' => $id ]);
     }
 
     /**
@@ -87,6 +97,11 @@ class BusinessLeadsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $clientToDelete = ClientCompany::find($id)->delete();
+        if(!$clientToDelete){
+            return redirect()->route('account.leads.businesses.index')->with('error', 'Não foi possível eliminar este registro.');
+        }
+
+        return redirect()->route('account.leads.businesses.index')->with('success', 'Registro eliminado com êxito.');
     }
 }

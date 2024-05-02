@@ -5,6 +5,7 @@ namespace App\Core\Enums;
 enum FormValidationMessages: string{
     case REQUIRED_FIELD = 'Campo obrigatório';
     case EXISTENT_FIELD = 'Este :field já está sendo utilizado';
+    case INVALID_EMAIL = 'Email inválido';
 
     public static function existentField(string $field): string
     {

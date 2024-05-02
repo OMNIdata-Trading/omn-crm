@@ -81,24 +81,6 @@
 </div>
 <div class="col-12">
   <div class="row row-cards">
-    {{-- <div class="col-sm-6 col-lg-3">
-      @livewire('apex-chart-bar', [
-        'label' => 'Novos Leads (Empresas)',
-        'chartColor' => 'orange',
-        'chartBarLabel' => 'Angariados',
-        'chartId' => 'new-leads',
-        'chartData' => $widgetCharts['new-leads']
-      ])
-    </div> --}}
-    {{-- <div class="col-sm-6 col-lg-3">
-      @livewire('apex-chart-bar', [
-        'label' => 'Novos Clientes (Empresas)',
-        'chartColor' => 'success',
-        'chartBarLabel' => 'Angariados',
-        'chartId' => 'new-clients',
-        'chartData' => $widgetCharts['new-clients']
-      ])
-    </div> --}}
     <div class="col-sm-6 col-lg-3">
       @livewire('apex-chart-bar', [
         'label' => 'Novos Leads (Particulares)',
@@ -244,12 +226,12 @@
               @endif
             </div>
             <div class="text-muted">
-                <div class="text-muted">No. de solicitações: {{ $lead->requests->count() }}</div>
+                <div class="text-muted">Solicitações esse ano: {{ $lead->requests->count() }}</div>
             </div>
           </td>
           <td>
             <div class="btn-list flex-nowrap">
-              <a href="#" class="btn btn-primary">
+              <a href="{{ route('account.leads.individuals.show', [ 'individual' => $lead->id ]) }}" class="btn btn-primary">
                 Visão geral
               </a>
               <div class="dropdown">
@@ -257,12 +239,14 @@
                   Ações
                 </button>
                 <div class="dropdown-menu dropdown-menu-end">
-                  <a class="dropdown-item" href="#">
+                  <a class="dropdown-item" href="{{ route('account.leads.individuals.edit', ['individual' => $lead->id]) }}">
                     Editar
                   </a>
-                  <a class="dropdown-item" href="#">
-                    Eliminar
-                  </a>
+                  <form method="POST" action="{{ route('account.leads.individuals.destroy', ['individual' => $lead->id]) }}">
+                      @csrf
+                      @method('DELETE')
+                      <button class="dropdown-item" onclick="return confirm('Deseja realmente eliminar o cliente {{ $lead->fullname }}?')" type="submit">Eliminar</button>
+                  </form>
                 </div>
               </div>
             </div>
