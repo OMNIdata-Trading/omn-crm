@@ -82,8 +82,8 @@ class ColaboratorsController extends Controller
     }
 
     public function settings(){
-        $roles = ColaboratorRole::get();
-        $classifications = ColaboratorRoleClassification::get();
-        return view('colaborators::pages.settings', compact('roles', 'classifications'));
+        $rolesArray = ColaboratorRole::get();
+        $classificationsArray = ColaboratorRoleClassification::get();
+        return view('colaborators::pages.settings', compact('rolesArray', 'classificationsArray'));
     }
 }
